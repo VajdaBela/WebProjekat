@@ -2,10 +2,59 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script src="jquery.min.js"></script>
+<script type="text/javascript">
+function sendOrg() {
+	var data = {ime: "asd"};
+	var s = JSON.stringify(data);
+	$.ajax({
+		url: "rest/organizacije",
+		type: "POST",
+		data: s,
+		contentType: "application/json",
+		dataType: "json",
+		complete: function(data) {
+			console.log(data);
+			data = {ime: "qwe"};
+			s = JSON.stringify(data);
+			$.ajax({
+				url: "rest/organizacije",
+				type: "POST",
+				data: s,
+				contentType: "application/json",
+				dataType: "json",
+				complete: function(data) {
+					console.log(data);
+				},
+			});
+		},
+	});
+
+}
+
+function changeOrg() {
+	var data = {ime: "qwe", opis: "nesto novo"};
+	var s = JSON.stringify(data);
+	$.ajax({
+		url: "rest/organizacije/rak",
+		type: "PUT",
+		data: s,
+		contentType: "application/json",
+		dataType: "json",
+		complete: function(data) {
+			console.log(data);
+		},
+	});
+}
+</script>
 </head>
 <body>
 
 	<a href="rest/demo/test">Test</a> <br />
+	<a href="rest/organizacije">organizacije</a> <br />
+	<a href="javascript:sendOrg()">addOrg</a> <br />
+	<a href="rest/organizacije/asd">findOrg</a> <br />
+	<a href="javascript:changeOrg()">changeOrg</a> <br />
 	
 </body>
 </html>

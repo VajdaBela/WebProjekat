@@ -5,9 +5,9 @@ public class Korisnik {
 	private String lozinka;
 	private String ime;
 	private String prezime;
-	private Organizacija organizacija;
+	private String organizacija;
 	private Uloga uloga;
-	
+
 	public String getEmail() {
 		return email;
 	}
@@ -40,11 +40,11 @@ public class Korisnik {
 		this.prezime = prezime;
 	}
 
-	public Organizacija getOrganizacija() {
+	public String getOrganizacija() {
 		return organizacija;
 	}
 
-	public void setOrganizacija(Organizacija organizacija) {
+	public void setOrganizacija(String organizacija) {
 		this.organizacija = organizacija;
 	}
 
@@ -56,5 +56,7 @@ public class Korisnik {
 		this.uloga = uloga;
 	}
 
-	enum Uloga {SUPER_ADMIN, ADMIN, KORISNIK}
+	enum Uloga {
+		SUPER_ADMIN, ADMIN, KORISNIK
+	}
 }

@@ -1,14 +1,24 @@
 package data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Organizacija {
 	private String ime;
 	private String opis;
 	private String Logo;
-	private List<Korisnik> korisnici;
-	private List<VirtualnaMasina> masine;
-	private List<Disk> diskovi;
+	private List<String> korisnici;
+	private List<String> masine;
+	private List<String> diskovi;
+
+	public Organizacija() {
+		this.ime = "";
+		this.opis = "";
+		this.Logo = "defaultLogo.img";
+		this.korisnici = new ArrayList<>();
+		this.masine = new ArrayList<>();
+		this.diskovi = new ArrayList<>();
+	}
 
 	public String getIme() {
 		return ime;
@@ -34,27 +44,27 @@ public class Organizacija {
 		Logo = logo;
 	}
 
-	public List<Korisnik> getKorisnici() {
+	public List<String> getKorisnici() {
 		return korisnici;
 	}
 
-	public void setKorisnici(List<Korisnik> korisnici) {
+	public void setKorisnici(List<String> korisnici) {
 		this.korisnici = korisnici;
 	}
 
-	public List<VirtualnaMasina> getMasine() {
+	public List<String> getMasine() {
 		return masine;
 	}
 
-	public void setMasine(List<VirtualnaMasina> masine) {
+	public void setMasine(List<String> masine) {
 		this.masine = masine;
 	}
 
-	public List<Disk> getDiskovi() {
+	public List<String> getDiskovi() {
 		return diskovi;
 	}
 
-	public void setDiskovi(List<Disk> diskovi) {
+	public void setDiskovi(List<String> diskovi) {
 		this.diskovi = diskovi;
 	}
 
