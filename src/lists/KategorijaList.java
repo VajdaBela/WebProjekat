@@ -28,6 +28,30 @@ public class KategorijaList {
 		return null;
 	}
 	
+	public boolean changeKategorija(Kategorija kat, String original) {
+		Kategorija stari = find(original);
+		if(stari == null) {
+			return false;
+		}
+		kategorije.remove(stari);
+		if(!checkValid(kat)) {
+			kategorije.add(stari);
+			return false;
+		}
+		kategorije.add(kat);
+		return true;
+	}
+	
+	public boolean deleteKategorija(String kategorija) {
+		Kategorija kat = find(kategorija);
+		if(kat == null) {
+			return false;
+		}
+		//TODO check if used
+		kategorije.remove(kat);
+		return true;
+	}
+	
 	private boolean checkValid(Kategorija kat) {
 		if(kat.getIme() == null || kat.getIme().equals("")) {
 			problemMsg.setError("Ime mora da postolji!");

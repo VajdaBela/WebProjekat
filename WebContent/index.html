@@ -214,40 +214,70 @@
 			complete : function(data) {
 				console.log(data);
 				var data = {
-						ime : "kategorija1",
-						brJezgara : 6,
-						ram : 6,
-						gpu : 6,
-					};
-					var s = JSON.stringify(data);
-					$.ajax({
-						url : "rest/kategorije",
-						type : "POST",
-						data : s,
-						contentType : "application/json",
-						dataType : "json",
-						complete : function(data) {
-							console.log(data);
-							var data = {
-									ime : "kategorija7",
-									brJezgara : 6,
-									gpu : 6,
-								};
-								var s = JSON.stringify(data);
-								$.ajax({
-									url : "rest/kategorije",
-									type : "POST",
-									data : s,
-									contentType : "application/json",
-									dataType : "json",
-									complete : function(data) {
-										console.log(data);
-									},
-								});
-						},
-					});
+					ime : "kategorija1",
+					brJezgara : 6,
+					ram : 6,
+					gpu : 6,
+				};
+				var s = JSON.stringify(data);
+				$.ajax({
+					url : "rest/kategorije",
+					type : "POST",
+					data : s,
+					contentType : "application/json",
+					dataType : "json",
+					complete : function(data) {
+						console.log(data);
+						var data = {
+							ime : "kategorija7",
+							brJezgara : 6,
+							gpu : 6,
+						};
+						var s = JSON.stringify(data);
+						$.ajax({
+							url : "rest/kategorije",
+							type : "POST",
+							data : s,
+							contentType : "application/json",
+							dataType : "json",
+							complete : function(data) {
+								console.log(data);
+							},
+						});
+					},
+				});
 			},
 		});
+	}
+
+	function changeKat() {
+		var data = {
+			ime : "kategorija1000",
+			brJezgara : 6,
+			ram: 8,
+			gpu : 6,
+		};
+		var s = JSON.stringify(data);
+		$.ajax({
+			url : "rest/kategorije/kategorija1",
+			type : "PUT",
+			data : s,
+			contentType : "application/json",
+			dataType : "json",
+			complete : function(data) {
+				console.log(data);
+			},
+		});
+	}
+	
+	function deleteKat() {
+		$.ajax({
+			url: "rest/kategorije/kategorija2",
+			type: "DELETE",
+			complete: function(data) {
+				console.log(data);
+			}
+		})
 	}
 </script>
 </head>
@@ -287,7 +317,11 @@
 	<br />
 	<a href="javascript:sendKate()">dodajKategorije</a>
 	<br />
-		<a href="rest/kategorije/kategorija2">kategorije za kategorija2</a>
+	<a href="rest/kategorije/kategorija2">kategorije za kategorija2</a>
+	<br />
+	<a href="javascript:changeKat()">changeKategorije</a>
+	<br />
+	<a href="javascript:deleteKat()">deleteKategorija</a>
 	<br />
 
 </body>
