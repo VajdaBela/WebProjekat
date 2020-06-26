@@ -45,6 +45,7 @@ public class KorisniciService {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response makeKorisnik(KorisnikDTO kor) {
+		AllLists.korisnici.addKorisnik(kor);
 		return null;
 	}
 }

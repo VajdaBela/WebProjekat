@@ -7,6 +7,8 @@ public class KorisnikDTO {
 	private String ime;
 	private String prezime;
 	private String organizacija;
+	private String uloga;
+	private String lozinka;
 
 	public KorisnikDTO() {
 		super();
@@ -18,6 +20,16 @@ public class KorisnikDTO {
 		this.ime = korisnik.getIme();
 		this.prezime = korisnik.getPrezime();
 		this.organizacija = korisnik.getOrganizacija() == null ? "" : korisnik.getOrganizacija().getIme();
+		this.uloga = korisnik.getUloga().toString();
+		this.lozinka = "";
+	}
+
+	public String getLozinka() {
+		return lozinka;
+	}
+
+	public void setLozinka(String lozinka) {
+		this.lozinka = lozinka;
 	}
 
 	public String getEmail() {
@@ -50,6 +62,14 @@ public class KorisnikDTO {
 
 	public void setOrganizacija(String organizacija) {
 		this.organizacija = organizacija;
+	}
+
+	public String getUloga() {
+		return uloga;
+	}
+
+	public void setUloga(String uloga) {
+		this.uloga = uloga;
 	}
 
 }

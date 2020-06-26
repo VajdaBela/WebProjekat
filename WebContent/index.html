@@ -88,6 +88,21 @@ function changeOrg() {
 		},
 	});
 }
+
+function sendKorisnik() {
+	var data = {uloga: "ADMN"};
+	var s = JSON.stringify(data);
+	$.ajax({
+		url: "rest/korisnici",
+		type: "POST",
+		data: s,
+		contentType: "application/json",
+		dataType: "json",
+		complete: function(data) {
+			console.log(data);
+		},
+	});
+}
 </script>
 </head>
 <body>
@@ -102,6 +117,7 @@ function changeOrg() {
 	<a href="rest/korisnici">korisnici</a><br />
 	<a href="rest/korisnici?ime=org1">korisnici za org1</a><br />
 	<a href="rest/korisnici?ime=org10">korisnici za org10</a><br />
+	<a href="javascript:sendKorisnik()">addKorisnik</a> <br /><br />
 	
 </body>
 </html>

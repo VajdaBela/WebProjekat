@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import app.JsonError;
+import data.Korisnik;
 import data.Organizacija;
+import dto.KorisnikDTO;
 import dto.OrganizacijaDTO;
 
 public class OrganizacijaList {
@@ -12,25 +14,10 @@ public class OrganizacijaList {
 	public JsonError problemMsg = new JsonError();
 	
 	public boolean addOrganizacija(OrganizacijaDTO org) {
-		if(org.getIme() == null || org.getIme().equals(""))
-		{
-			problemMsg.setError("Ime mora da postoji!");;
+		if(!checkValid(org)) {
 			return false;
 		}
-		if(find(org.getIme()) != null) {
-			problemMsg.setError("Ime nije jedinstven!");;
-			return false;
-		}
-		
-		Organizacija organizacija = new Organizacija();
-		organizacija.setIme(org.getIme());
-		if(org.getOpis() != null)
-			organizacija.setOpis(org.getOpis());
-		if(org.getLogo() != null)
-			organizacija.setLogo(org.getLogo());
-		
-		organizacije.add(organizacija);
-		
+		organizacije.add(makeOrganizacija(org));
 		return true;
 	}
 
@@ -45,29 +32,41 @@ public class OrganizacijaList {
 	}
 	
 	public boolean changeOrganizacija(OrganizacijaDTO org, String original) {
-		Organizacija organizazija = find(original);
-		if(organizazija == null) {
-			return false;
-		}
-		organizacije.remove(organizazija);
-		if(find(org.getIme()) != null) {
-			organizacije.add(organizazija);
-			problemMsg.setError("Vec ima organizacija sa imenom!");
-			return false;
-		}
 		
-		organizazija.setIme(org.getIme());
-		if(org.getOpis() == null)
-			organizazija.setOpis("");
-		else
-			organizazija.setOpis(org.getOpis());
-		if(org.getLogo() == null)
-			organizazija.setLogo("");
-		else
-			organizazija.setLogo(org.getLogo());
-		organizacije.add(organizazija);
-
+		Organizacija stari = find(original);
+		if(stari == null) {
+			return false;
+		}
+		organizacije.remove(stari);
+		if(!checkValid(org)) {
+			organizacije.add(stari);
+			return false;
+		}
+		organizacije.add(makeOrganizacija(org));
 		return true;
+	}
+	
+	private boolean checkValid(OrganizacijaDTO org) {
+		if(org.getIme() == null || org.getIme().equals("")){
+			problemMsg.setError("Ime mora da postolji!");
+			return false;
+		}
+		if(find(org.getIme()) != null) {
+			problemMsg.setError("Ime nije jedinstven!");
+			return false;
+		}
+		return true;
+	}
+	
+	private Organizacija makeOrganizacija(OrganizacijaDTO dto) {
+		Organizacija org = new Organizacija();
+		if(dto.getIme() != null)
+			org.setIme(dto.getIme());
+		if(dto.getOpis() != null)
+			org.setOpis(dto.getOpis());
+		if(dto.getLogo() != null)
+			org.setLogo(dto.getLogo());
+		return org;
 	}
 
 	public List<Organizacija> getOrganizacije() {
