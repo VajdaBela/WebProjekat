@@ -1,10 +1,22 @@
 package data;
 
-public class Kategoria {
+public class Kategorija {
 	private String ime;
 	private int brJezgara;
 	private int ram;
 	private int gpu;
+
+	public Kategorija() {
+		this.ime = "";
+	}
+
+	public Kategorija(String ime, int brJezgara, int ram, int gpu) {
+		super();
+		this.ime = ime;
+		this.brJezgara = brJezgara;
+		this.ram = ram;
+		this.gpu = gpu;
+	}
 
 	public String getIme() {
 		return ime;

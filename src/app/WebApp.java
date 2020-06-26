@@ -3,6 +3,7 @@ package app;
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
+import data.Kategorija;
 import data.Korisnik;
 import data.Korisnik.Uloga;
 import data.Organizacija;
@@ -24,6 +25,14 @@ public class WebApp extends Application {
 		AllLists.korisnici.getKorisnici().add(korisnik2);
 		AllLists.korisnici.getKorisnici().add(korisnik3);
 		AllLists.korisnici.getKorisnici().add(korisnik4);
+		
+		
+		Kategorija kategorija1 = new Kategorija("kategorija1", 1,1,1);
+		Kategorija kategorija2 = new Kategorija("kategorija2", 2,2,2);
+		Kategorija kategorija3 = new Kategorija("kategorija3", 3,3,3);
+		AllLists.kategorije.getKategorije().add(kategorija1);
+		AllLists.kategorije.getKategorije().add(kategorija2);
+		AllLists.kategorije.getKategorije().add(kategorija3);
 		
 		
 		organizacija1.getKorisnici().add(korisnik2);

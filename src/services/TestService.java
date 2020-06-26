@@ -7,6 +7,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.xml.ws.WebServiceContext;
 
+import app.AllLists;
+
 @Path("/demo")
 public class TestService {
 
@@ -17,6 +19,7 @@ public class TestService {
 	@Path("/test")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String test() {
+		AllLists.kategorije.getKategorije();
 		return "REST rulez!";
 	}
 }

@@ -6,7 +6,7 @@ import java.util.List;
 public class VirtualnaMasina {
 	private String ime;
 	private Organizacija organizacija;
-	private Kategoria kategorija;
+	private Kategorija kategorija;
 	private List<Disk> diskovi;
 	private List<Date> aktivnosti;
 
@@ -26,11 +26,11 @@ public class VirtualnaMasina {
 		this.organizacija = organizacija;
 	}
 
-	public Kategoria getKategorija() {
+	public Kategorija getKategorija() {
 		return kategorija;
 	}
 
-	public void setKategorija(Kategoria kategorija) {
+	public void setKategorija(Kategorija kategorija) {
 		this.kategorija = kategorija;
 	}
 
