@@ -5,7 +5,8 @@
 <script src="jquery.min.js"></script>
 <script type="text/javascript">
 function sendOrg() {
-	var data = {ime: "asd"};
+	//good
+	var data = {ime: "babajaga"};
 	var s = JSON.stringify(data);
 	$.ajax({
 		url: "rest/organizacije",
@@ -15,7 +16,8 @@ function sendOrg() {
 		dataType: "json",
 		complete: function(data) {
 			console.log(data);
-			data = {ime: "qwe"};
+			//duplicate name
+			data = {ime: "org1"};
 			s = JSON.stringify(data);
 			$.ajax({
 				url: "rest/organizacije",
@@ -25,24 +27,64 @@ function sendOrg() {
 				dataType: "json",
 				complete: function(data) {
 					console.log(data);
+					//no name
+					data = {};
+					s = JSON.stringify(data);
+					$.ajax({
+						url: "rest/organizacije",
+						type: "POST",
+						data: s,
+						contentType: "application/json",
+						dataType: "json",
+						complete: function(data) {
+							console.log(data);
+						},
+					});
+
 				},
 			});
 		},
 	});
-
 }
 
 function changeOrg() {
-	var data = {ime: "qwe", opis: "nesto novo"};
+	//dobar
+	var data = {ime: "org1", opis: "super kalafraga"};
 	var s = JSON.stringify(data);
 	$.ajax({
-		url: "rest/organizacije/rak",
+		url: "rest/organizacije/org1",
 		type: "PUT",
 		data: s,
 		contentType: "application/json",
 		dataType: "json",
 		complete: function(data) {
 			console.log(data);
+			//nema originala
+			data = {ime: "org1", opis: "super kalafraga"};
+			s = JSON.stringify(data);
+			$.ajax({
+				url: "rest/organizacije/org10",
+				type: "PUT",
+				data: s,
+				contentType: "application/json",
+				dataType: "json",
+				complete: function(data) {
+					console.log(data);
+					//ne jedinstven novi
+					data = {ime: "org2", opis: "super kalafraga"};
+					s = JSON.stringify(data);
+					$.ajax({
+						url: "rest/organizacije/org1",
+						type: "PUT",
+						data: s,
+						contentType: "application/json",
+						dataType: "json",
+						complete: function(data) {
+							console.log(data);
+						},
+					});
+				},
+			});
 		},
 	});
 }
@@ -53,8 +95,13 @@ function changeOrg() {
 	<a href="rest/demo/test">Test</a> <br />
 	<a href="rest/organizacije">organizacije</a> <br />
 	<a href="javascript:sendOrg()">addOrg</a> <br />
-	<a href="rest/organizacije/asd">findOrg</a> <br />
-	<a href="javascript:changeOrg()">changeOrg</a> <br />
+	<a href="rest/organizacije/org1">findOrg</a> <br />
+	<a href="rest/organizacije/org10">findBadOrg</a> <br />
+	<a href="javascript:changeOrg()">changeOrg</a> <br /><br />
+	
+	<a href="rest/korisnici">korisnici</a><br />
+	<a href="rest/korisnici?ime=org1">korisnici za org1</a><br />
+	<a href="rest/korisnici?ime=org10">korisnici za org10</a><br />
 	
 </body>
 </html>

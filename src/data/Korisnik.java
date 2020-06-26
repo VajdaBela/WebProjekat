@@ -5,8 +5,27 @@ public class Korisnik {
 	private String lozinka;
 	private String ime;
 	private String prezime;
-	private String organizacija;
+	private Organizacija organizacija;
 	private Uloga uloga;
+
+	public Korisnik() {
+		this.email = "";
+		this.lozinka = "";
+		this.ime = "";
+		this.prezime = "";
+		this.organizacija = null;
+		this.uloga = Uloga.KORISNIK;
+	}
+
+	public Korisnik(String email, String lozinka, String ime, String prezime, Organizacija organizacija, Uloga uloga) {
+		super();
+		this.email = email;
+		this.lozinka = lozinka;
+		this.ime = ime;
+		this.prezime = prezime;
+		this.organizacija = organizacija;
+		this.uloga = uloga;
+	}
 
 	public String getEmail() {
 		return email;
@@ -40,11 +59,11 @@ public class Korisnik {
 		this.prezime = prezime;
 	}
 
-	public String getOrganizacija() {
+	public Organizacija getOrganizacija() {
 		return organizacija;
 	}
 
-	public void setOrganizacija(String organizacija) {
+	public void setOrganizacija(Organizacija organizacija) {
 		this.organizacija = organizacija;
 	}
 
@@ -56,7 +75,7 @@ public class Korisnik {
 		this.uloga = uloga;
 	}
 
-	enum Uloga {
+	public enum Uloga {
 		SUPER_ADMIN, ADMIN, KORISNIK
 	}
 }

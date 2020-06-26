@@ -6,18 +6,24 @@ import java.util.List;
 public class Organizacija {
 	private String ime;
 	private String opis;
-	private String Logo;
-	private List<String> korisnici;
-	private List<String> masine;
-	private List<String> diskovi;
+	private String logo;
+	private List<Korisnik> korisnici;
+	private List<VirtualnaMasina> masine;
+	private List<Disk> diskovi;
 
 	public Organizacija() {
 		this.ime = "";
 		this.opis = "";
-		this.Logo = "defaultLogo.img";
+		this.logo = "defaultLogo.img";
 		this.korisnici = new ArrayList<>();
 		this.masine = new ArrayList<>();
 		this.diskovi = new ArrayList<>();
+	}
+
+	public Organizacija(String ime, String opis) {
+		this();
+		this.ime = ime;
+		this.opis = opis;
 	}
 
 	public String getIme() {
@@ -37,34 +43,34 @@ public class Organizacija {
 	}
 
 	public String getLogo() {
-		return Logo;
+		return logo;
 	}
 
 	public void setLogo(String logo) {
-		Logo = logo;
+		this.logo = logo;
 	}
 
-	public List<String> getKorisnici() {
+	public List<Korisnik> getKorisnici() {
 		return korisnici;
 	}
 
-	public void setKorisnici(List<String> korisnici) {
+	public void setKorisnici(List<Korisnik> korisnici) {
 		this.korisnici = korisnici;
 	}
 
-	public List<String> getMasine() {
+	public List<VirtualnaMasina> getMasine() {
 		return masine;
 	}
 
-	public void setMasine(List<String> masine) {
+	public void setMasine(List<VirtualnaMasina> masine) {
 		this.masine = masine;
 	}
 
-	public List<String> getDiskovi() {
+	public List<Disk> getDiskovi() {
 		return diskovi;
 	}
 
-	public void setDiskovi(List<String> diskovi) {
+	public void setDiskovi(List<Disk> diskovi) {
 		this.diskovi = diskovi;
 	}
 

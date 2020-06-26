@@ -1,5 +1,6 @@
 package services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ws.rs.Consumes;
@@ -14,24 +15,27 @@ import javax.ws.rs.core.Response;
 
 import app.AllLists;
 import data.Organizacija;
+import dto.OrganizacijaDTO;
 
 @Path("/organizacije")
-public class OrganizacijeServlet {
+public class OrganizacijeService {
 
 	@GET
-	@Path("")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getOrganizacije() {
+		List<OrganizacijaDTO> organizacijeDto = new ArrayList<>();
+		for (Organizacija organizacija : AllLists.organizacije.getOrganizacije()) {
+			organizacijeDto.add(new OrganizacijaDTO(organizacija));
+		}
 		return Response
-				.ok(AllLists.organizacije.getOrganizacije())
+				.ok(organizacijeDto)
 				.build();
 	}
 
 	@POST
-	@Path("")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response makeOrganizacija(Organizacija org) {
+	public Response makeOrganizacija(OrganizacijaDTO org) {
 		if(!AllLists.organizacije.addOrganizacija(org)) {
 			return Response
 					.status(Response.Status.BAD_REQUEST)
@@ -48,7 +52,8 @@ public class OrganizacijeServlet {
 	@Path("{ime}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getOrganizacija(@PathParam("ime") String ime) {
-		if(!AllLists.organizacije.find(ime)) {
+		Organizacija org = AllLists.organizacije.find(ime);
+		if(org == null) {
 			return Response
 					.status(Response.Status.BAD_REQUEST)
 					.entity(AllLists.organizacije.problemMsg)
@@ -56,7 +61,7 @@ public class OrganizacijeServlet {
 					.build();
 		}
 		return Response
-				.ok(AllLists.organizacije.found)
+				.ok(new OrganizacijaDTO(org))
 				.build();
 	}
 	
@@ -64,7 +69,7 @@ public class OrganizacijeServlet {
 	@Path("{ime}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response changeOrganization(@PathParam("ime") String ime, Organizacija org) {
+	public Response changeOrganization(@PathParam("ime") String ime, OrganizacijaDTO org) {
 		if(!AllLists.organizacije.changeOrganizacija(org, ime)) {
 			return Response
 					.status(Response.Status.BAD_REQUEST)
@@ -73,7 +78,7 @@ public class OrganizacijeServlet {
 					.build();
 		}
 		return Response
-				.ok(AllLists.organizacije.found)
+				.ok(org)
 				.build();
 	}
 }
