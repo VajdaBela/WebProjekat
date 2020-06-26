@@ -10,6 +10,7 @@ import data.Organizacija;
 import data.Korisnik.Uloga;
 import dto.KorisnikDTO;
 
+//TODO ne menjati organizaciju
 public class KorisnikList {
 	private List<Korisnik> korisnici = new ArrayList<>();
 	public JsonError problemMsg = new JsonError();
@@ -28,6 +29,64 @@ public class KorisnikList {
 	}
 	
 	public boolean addKorisnik(KorisnikDTO kor) {
+		if(!checkVAlid(kor)) {
+			return false;
+		}
+		
+		korisnici.add(makeKorisnik(kor));
+		return true;
+	}
+	
+	public boolean changeKorisnik(KorisnikDTO kor, String original) {
+		Korisnik stari = find(original);
+		if(stari == null) {
+			return false;
+		}
+		korisnici.remove(stari);
+		if(!checkVAlid(kor)) {
+			korisnici.add(stari);
+			return false;
+		}
+		korisnici.add(makeKorisnik(kor));
+		return true;
+	}
+	
+	public boolean deleteKorisnik(String kor) {
+		Korisnik korisnik = find(kor);
+		if(korisnik == null) {
+			return false;
+		}
+		korisnici.remove(korisnik);
+		korisnik.getOrganizacija().getKorisnici().remove(korisnik);
+		return true;
+	}
+	
+	public Korisnik find(String email) {
+		for (Korisnik korisnik : korisnici) {
+			if(korisnik.getEmail().equals(email)) {
+				return korisnik;
+			}
+		}
+		return null;
+	}
+	
+	private Korisnik makeKorisnik(KorisnikDTO kor) {
+		Korisnik korisnik = new Korisnik();
+		
+		korisnik.setEmail(kor.getEmail());
+		if(kor.getLozinka() != null)
+			korisnik.setLozinka(kor.getLozinka());
+		korisnik.setIme(kor.getIme());
+		korisnik.setPrezime(kor.getPrezime());
+		Organizacija organizacija = AllLists.organizacije.find(kor.getOrganizacija());
+		korisnik.setOrganizacija(organizacija);
+		organizacija.getKorisnici().add(korisnik);
+		korisnik.setUloga(Uloga.valueOf(kor.getUloga()));
+		
+		return korisnik;
+	}
+	
+	private boolean checkVAlid(KorisnikDTO kor) {
 		if(kor.getEmail() == null || kor.getEmail().equals("")) {
 			problemMsg.setError("Email mora da postolji!");
 			return false;
@@ -36,7 +95,6 @@ public class KorisnikList {
 			problemMsg.setError("Email nije jedinstven!");
 			return false;
 		}
-		//TODO implement find
 		
 		if(kor.getIme() == null || kor.getIme().equals("")) {
 			problemMsg.setError("Ime mora da postolji!");
@@ -63,34 +121,14 @@ public class KorisnikList {
 			problemMsg.setError("Uloga mora da postolji!");
 			return false;
 		}
-		Uloga uloga;
 		try {
-			uloga = Uloga.valueOf(kor.getUloga());
+			Uloga.valueOf(kor.getUloga());
 		}catch (Exception e) {
 			problemMsg.setError("Uloga je loseg formata!");
 			return false;
 		}
 		
-		Korisnik korisnik = new Korisnik();
-		korisnik.setEmail(kor.getEmail());
-		if(kor.getLozinka() != null)
-			korisnik.setLozinka(kor.getLozinka());
-		korisnik.setIme(kor.getIme());
-		korisnik.setPrezime(kor.getPrezime());
-		korisnik.setOrganizacija(organizacija);
-		korisnik.setUloga(uloga);
-		korisnici.add(korisnik);
-		
 		return true;
-	}
-	
-	public Korisnik find(String email) {
-		for (Korisnik korisnik : korisnici) {
-			if(korisnik.getEmail().equals(email)) {
-				return korisnik;
-			}
-		}
-		return null;
 	}
 
 	public List<Korisnik> getKorisnici() {

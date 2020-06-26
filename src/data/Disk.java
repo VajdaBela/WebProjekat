@@ -47,7 +47,7 @@ public class Disk {
 		this.virtualanaMasina = virtualanaMasina;
 	}
 
-	enum Tip {
+	public enum Tip {
 		SSD, HDD
 	}
 }

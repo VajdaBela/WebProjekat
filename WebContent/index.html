@@ -4,120 +4,229 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <script src="jquery.min.js"></script>
 <script type="text/javascript">
-function sendOrg() {
-	//good
-	var data = {ime: "babajaga"};
-	var s = JSON.stringify(data);
-	$.ajax({
-		url: "rest/organizacije",
-		type: "POST",
-		data: s,
-		contentType: "application/json",
-		dataType: "json",
-		complete: function(data) {
-			console.log(data);
-			//duplicate name
-			data = {ime: "org1"};
-			s = JSON.stringify(data);
-			$.ajax({
-				url: "rest/organizacije",
-				type: "POST",
-				data: s,
-				contentType: "application/json",
-				dataType: "json",
-				complete: function(data) {
-					console.log(data);
-					//no name
-					data = {};
-					s = JSON.stringify(data);
-					$.ajax({
-						url: "rest/organizacije",
-						type: "POST",
-						data: s,
-						contentType: "application/json",
-						dataType: "json",
-						complete: function(data) {
-							console.log(data);
-						},
-					});
+	function sendOrg() {
+		//good
+		var data = {
+			ime : "babajaga"
+		};
+		var s = JSON.stringify(data);
+		$.ajax({
+			url : "rest/organizacije",
+			type : "POST",
+			data : s,
+			contentType : "application/json",
+			dataType : "json",
+			complete : function(data) {
+				console.log(data);
+				//duplicate name
+				data = {
+					ime : "org1"
+				};
+				s = JSON.stringify(data);
+				$.ajax({
+					url : "rest/organizacije",
+					type : "POST",
+					data : s,
+					contentType : "application/json",
+					dataType : "json",
+					complete : function(data) {
+						console.log(data);
+						//no name
+						data = {};
+						s = JSON.stringify(data);
+						$.ajax({
+							url : "rest/organizacije",
+							type : "POST",
+							data : s,
+							contentType : "application/json",
+							dataType : "json",
+							complete : function(data) {
+								console.log(data);
+							},
+						});
 
-				},
-			});
-		},
-	});
-}
+					},
+				});
+			},
+		});
+	}
 
-function changeOrg() {
-	//dobar
-	var data = {ime: "org1", opis: "super kalafraga"};
-	var s = JSON.stringify(data);
-	$.ajax({
-		url: "rest/organizacije/org1",
-		type: "PUT",
-		data: s,
-		contentType: "application/json",
-		dataType: "json",
-		complete: function(data) {
-			console.log(data);
-			//nema originala
-			data = {ime: "org1", opis: "super kalafraga"};
-			s = JSON.stringify(data);
-			$.ajax({
-				url: "rest/organizacije/org10",
-				type: "PUT",
-				data: s,
-				contentType: "application/json",
-				dataType: "json",
-				complete: function(data) {
-					console.log(data);
-					//ne jedinstven novi
-					data = {ime: "org2", opis: "super kalafraga"};
-					s = JSON.stringify(data);
-					$.ajax({
-						url: "rest/organizacije/org1",
-						type: "PUT",
-						data: s,
-						contentType: "application/json",
-						dataType: "json",
-						complete: function(data) {
-							console.log(data);
-						},
-					});
-				},
-			});
-		},
-	});
-}
+	function changeOrg() {
+		//dobar
+		var data = {
+			ime : "org1",
+			opis : "super kalafraga"
+		};
+		var s = JSON.stringify(data);
+		$.ajax({
+			url : "rest/organizacije/org1",
+			type : "PUT",
+			data : s,
+			contentType : "application/json",
+			dataType : "json",
+			complete : function(data) {
+				console.log(data);
+				//nema originala
+				data = {
+					ime : "org1",
+					opis : "super kalafraga"
+				};
+				s = JSON.stringify(data);
+				$.ajax({
+					url : "rest/organizacije/org10",
+					type : "PUT",
+					data : s,
+					contentType : "application/json",
+					dataType : "json",
+					complete : function(data) {
+						console.log(data);
+						//ne jedinstven novi
+						data = {
+							ime : "org2",
+							opis : "super kalafraga"
+						};
+						s = JSON.stringify(data);
+						$.ajax({
+							url : "rest/organizacije/org1",
+							type : "PUT",
+							data : s,
+							contentType : "application/json",
+							dataType : "json",
+							complete : function(data) {
+								console.log(data);
+							},
+						});
+					},
+				});
+			},
+		});
+	}
 
-function sendKorisnik() {
-	var data = {uloga: "ADMN"};
-	var s = JSON.stringify(data);
-	$.ajax({
-		url: "rest/korisnici",
-		type: "POST",
-		data: s,
-		contentType: "application/json",
-		dataType: "json",
-		complete: function(data) {
-			console.log(data);
-		},
-	});
-}
+	function sendKorisnik() {
+		//dobar
+		var data = {
+			email : "a@e",
+			ime : "korisnik6",
+			prezime : "korisnic6",
+			organizacija : "org1",
+			uloga : "KORISNIK",
+			lozinka : "aaaa"
+		};
+		var s = JSON.stringify(data);
+		$.ajax({
+			url : "rest/korisnici",
+			type : "POST",
+			data : s,
+			contentType : "application/json",
+			dataType : "json",
+			complete : function(data) {
+				console.log(data);
+				//duplikat
+				data = {
+					email : "korisnik2",
+					ime : "korisnik6",
+					prezime : "korisnic6",
+					organizacija : "org1",
+					uloga : "KORISNIK",
+					lozinka : "aaaa"
+				};
+				s = JSON.stringify(data);
+				$.ajax({
+					url : "rest/korisnici",
+					type : "POST",
+					data : s,
+					contentType : "application/json",
+					dataType : "json",
+					complete : function(data) {
+						console.log(data);
+						//nepotpun
+						data = {
+							email : "korisnik9",
+							prezime : "korisnic6",
+							organizacija : "org1",
+							uloga : "KORISNIK",
+							lozinka : "aaaa"
+						};
+						s = JSON.stringify(data);
+						$.ajax({
+							url : "rest/korisnici",
+							type : "POST",
+							data : s,
+							contentType : "application/json",
+							dataType : "json",
+							complete : function(data) {
+								console.log(data);
+							},
+						});
+					},
+				});
+			},
+		});
+	}
+
+	function changeKorisnik() {
+		var data = {
+			email : "korisnik9",
+			prezime : "korisnic6",
+			organizacija : "org1",
+			uloga : "KORISNIK",
+			lozinka : "aaaa",
+			ime: "nasus",
+		};
+		var s = JSON.stringify(data);
+		$.ajax({
+			url : "rest/korisnici/korisnik1",
+			type : "PUT",
+			data : s,
+			contentType : "application/json",
+			dataType : "json",
+			complete : function(data) {
+				console.log(data);
+			},
+		});
+	}
+	
+	function deleteKorisnik() {
+		$.ajax({
+			url: "rest/korisnici/korisnik1",
+			type: "DELETE",
+			complete: function(data) {
+				console.log(data);
+			}
+		})
+	}
 </script>
 </head>
 <body>
 
-	<a href="rest/demo/test">Test</a> <br />
-	<a href="rest/organizacije">organizacije</a> <br />
-	<a href="javascript:sendOrg()">addOrg</a> <br />
-	<a href="rest/organizacije/org1">findOrg</a> <br />
-	<a href="rest/organizacije/org10">findBadOrg</a> <br />
-	<a href="javascript:changeOrg()">changeOrg</a> <br /><br />
-	
-	<a href="rest/korisnici">korisnici</a><br />
-	<a href="rest/korisnici?ime=org1">korisnici za org1</a><br />
-	<a href="rest/korisnici?ime=org10">korisnici za org10</a><br />
-	<a href="javascript:sendKorisnik()">addKorisnik</a> <br /><br />
-	
+	<a href="rest/demo/test">Test</a>
+	<br />
+	<a href="rest/organizacije">organizacije</a>
+	<br />
+	<a href="javascript:sendOrg()">addOrg</a>
+	<br />
+	<a href="rest/organizacije/org1">findOrg</a>
+	<br />
+	<a href="rest/organizacije/org10">findBadOrg</a>
+	<br />
+	<a href="javascript:changeOrg()">changeOrg</a>
+	<br />
+	<br />
+
+	<a href="rest/korisnici">korisnici</a>
+	<br />
+	<a href="rest/korisnici?ime=org1">korisnici za org1</a>
+	<br />
+	<a href="rest/korisnici?ime=org10">korisnici za org10</a>
+	<br />
+	<a href="javascript:sendKorisnik()">addKorisnik</a>
+	<br />
+	<a href="rest/korisnici/korisnik2">findKorisnik</a>
+	<br />
+	<a href="javascript:changeKorisnik()">changeKorisnik</a>
+	<br />
+	<a href="javascript:deleteKorisnik()">deleteKorisnik</a>
+	<br />
+
 </body>
 </html>

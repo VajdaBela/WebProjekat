@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import app.JsonError;
-import data.Korisnik;
 import data.Organizacija;
-import dto.KorisnikDTO;
 import dto.OrganizacijaDTO;
 
 public class OrganizacijaList {
