@@ -7,6 +7,23 @@ public class Disk {
 	private int kapacitet;
 	private VirtualnaMasina virtualanaMasina;
 
+	public Disk() {
+		this.ime = "";
+		this.organizacija = null;
+		this.tip = Tip.HDD;
+		this.kapacitet = 0;
+		this.virtualanaMasina = null;
+	}
+
+	public Disk(String ime, Tip tip, int kapacitet, Organizacija organizacija, VirtualnaMasina virtualnaMasina) {
+		this();
+		this.ime = ime;
+		this.tip = tip;
+		this.kapacitet = kapacitet;
+		this.organizacija = organizacija;
+		this.virtualanaMasina = virtualnaMasina;
+	}
+
 	public String getIme() {
 		return ime;
 	}

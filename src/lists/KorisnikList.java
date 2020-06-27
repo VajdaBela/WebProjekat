@@ -113,11 +113,11 @@ public class KorisnikList {
 		Organizacija organizacija = AllLists.organizacije.find(kor.getOrganizacija());
 		if(organizacija == null)
 		{
-			problemMsg.setError("Nepostolji organizacija!");
+			problemMsg.setError("Ne postolji organizacija!");
 			return false;
 		}
 		
-		if(kor.getUloga() == null || kor.getUloga() == "") {
+		if(kor.getUloga() == null || kor.getUloga().equals("")) {
 			problemMsg.setError("Uloga mora da postolji!");
 			return false;
 		}

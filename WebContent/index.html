@@ -279,6 +279,60 @@
 			}
 		})
 	}
+	
+	function sendDisk() {
+		//dobar
+		var data = {
+			ime: "disk5",
+			organizacija: "org1",
+			tip: "HDD",
+			kapacitet: 5,
+			virtualnaMasina: "virtualnaMasina1"
+		}
+		var s = JSON.stringify(data);
+		$.ajax({
+			url: "rest/diskovi",
+			type: "POST",
+			data : s,
+			contentType : "application/json",
+			dataType : "json",
+			complete: function(data) {
+				console.log(data);
+			}
+		});
+	}
+	
+	function changeDisk() {
+		//dobar
+		var data = {
+			ime: "disk1",
+			organizacija: "org1",
+			tip: "HDD",
+			kapacitet: 100,
+			virtualnaMasina: "virtualnaMasina1"
+		}
+		var s = JSON.stringify(data);
+		$.ajax({
+			url: "rest/diskovi/disk1",
+			type: "PUT",
+			data : s,
+			contentType : "application/json",
+			dataType : "json",
+			complete: function(data) {
+				console.log(data);
+			}
+		});
+	}
+	
+	function deletedisk() {
+		$.ajax({
+			url: "rest/diskovi/disk1",
+			type: "DELETE",
+			complete: function(data) {
+				console.log(data);
+			}
+		});
+	}
 </script>
 </head>
 <body>
@@ -323,6 +377,19 @@
 	<br />
 	<a href="javascript:deleteKat()">deleteKategorija</a>
 	<br />
+	<br />
+	
+	<a href="rest/diskovi">diskovi</a>
+	<br />
+	<a href="javascript:sendDisk()">dodajDisk</a>
+	<br />
+	<a href="rest/diskovi/disk1">disk za disk1</a>
+	<br />
+	<a href="javascript:changeDisk()">changeDisk</a>
+	<br />
+	<a href="javascript:deletedisk()">deleteDisk</a>
+	<br />
+	
 
 </body>
 </html>

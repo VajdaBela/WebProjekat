@@ -1,5 +1,6 @@
 package data;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -9,7 +10,22 @@ public class VirtualnaMasina {
 	private Kategorija kategorija;
 	private List<Disk> diskovi;
 	private List<Date> aktivnosti;
+	
+	public VirtualnaMasina() {
+		this.ime = "";
+		this.organizacija = null;
+		this.kategorija = null;
+		this.diskovi = new ArrayList<Disk>();
+		this.aktivnosti = new ArrayList<Date>();
+	}
 
+	public VirtualnaMasina(String ime, Organizacija organizacija, Kategorija kategorija) {
+		this();
+		this.ime = ime;
+		this.organizacija = organizacija;
+		this.kategorija = kategorija;
+	}
+	
 	public String getIme() {
 		return ime;
 	}

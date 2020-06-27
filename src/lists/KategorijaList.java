@@ -68,7 +68,7 @@ public class KategorijaList {
 		}
 		
 		if(kat.getRam() <= 0) {
-			problemMsg.setError("Broj rama u GB mora biti veci od nule!");
+			problemMsg.setError("Kapacitet rama u GB mora biti veci od nule!");
 			return false;
 		}
 		
