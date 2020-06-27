@@ -55,6 +55,7 @@ public class DiskList {
 				return disk;
 			}
 		}
+		problemMsg.setError("Disk ne postolji!");
 		return null;
 	}
 	

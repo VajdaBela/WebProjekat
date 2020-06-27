@@ -67,6 +67,7 @@ public class KorisnikList {
 				return korisnik;
 			}
 		}
+		problemMsg.setError("Korisnik ne postolji!");
 		return null;
 	}
 	
