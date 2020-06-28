@@ -19,6 +19,10 @@ public class TestService {
 	@Path("/test")
 	@Produces(MediaType.APPLICATION_JSON)
 	public String test() {
+		AllLists.korisnici.getKorisnici();
+		AllLists.organizacije.getOrganizacije();
+		AllLists.virtualneMasine.getVirtualneMasine();
+		AllLists.diskovi.getDiskovi();
 		AllLists.kategorije.getKategorije();
 		return "REST rulez!";
 	}
