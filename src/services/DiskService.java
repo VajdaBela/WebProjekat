@@ -25,8 +25,9 @@ public class DiskService {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getDiskove() {
+		//TODO fix by organization
 		List<DiskDTO> diskoviDTO = new ArrayList<>();
-		for (Disk disk : AllLists.diskovi.getDiskovi()) {
+		for (Disk disk : AllLists.diskovi.getDiskovi().values()) {
 			diskoviDTO.add(new DiskDTO(disk));
 		}
 		return Response

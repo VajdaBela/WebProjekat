@@ -1,7 +1,6 @@
 package lists;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 import app.AllLists;
 import app.JsonError;
@@ -12,123 +11,123 @@ import data.VirtualnaMasina;
 import dto.DiskDTO;
 
 public class DiskList {
-	private List<Disk> diskovi = new ArrayList<>();
+	private HashMap<String, Disk> diskovi = new HashMap<>();
 	public JsonError problemMsg = new JsonError();
-	
+
 	public boolean addDisk(DiskDTO disk) {
-		if(!checkValid(disk)) {
+		if (!checkValid(disk)) {
 			return false;
 		}
-		
-		diskovi.add(makeDisk(disk));
+
+		Disk newDisk = makeDisk(disk);
+		diskovi.put(newDisk.getIme(), newDisk);
 		return true;
 	}
-	
+
 	public boolean changeDisk(DiskDTO di, String original) {
 		Disk stari = find(original);
-		if(stari == null) {
+		if (stari == null) {
 			return false;
 		}
-		diskovi.remove(stari);
-		if(!checkValid(di)) {
-			diskovi.add(stari);
+		diskovi.remove(original);
+		if (!checkValid(di)) {
+			diskovi.put(stari.getIme(), stari);
 			return false;
 		}
-		diskovi.add(makeDisk(di));
+		// TODO edit insdtead of make
+		Disk disk = makeDisk(di);
+		diskovi.put(disk.getIme(), disk);
 		return true;
 	}
-	
+
 	public boolean deleteDisk(String ime) {
 		Disk disk = find(ime);
-		if(disk == null) {
+		if (disk == null) {
 			return false;
 		}
-		diskovi.remove(disk);
-		disk.getOrganizacija().getDiskovi().remove(disk);
-		disk.getVirtualanaMasina().getDiskovi().remove(disk);
+		diskovi.remove(disk.getIme());
+		disk.getOrganizacija().removeDisk(disk);
+		disk.getVirtualanaMasina().removeDisk(disk);
 		return true;
 	}
-	
+
 	public Disk find(String ime) {
-		for (Disk disk : diskovi) {
-			if(disk.getIme().equals(ime)) {
-				return disk;
-			}
-		}
-		problemMsg.setError("Disk ne postolji!");
-		return null;
+		Disk disk = diskovi.get(ime);
+		if (disk == null)
+			problemMsg.setError("Disk ne postolji!");
+		return disk;
 	}
-	
+
 	private boolean checkValid(DiskDTO disk) {
-		if(disk.getIme() == null || disk.getIme().equals("")) {
+		if (disk.getIme() == null || disk.getIme().equals("")) {
 			problemMsg.setError("Ime mora da postolji!");
 			return false;
 		}
-		if(find(disk.getIme()) != null) {
+		if (find(disk.getIme()) != null) {
 			problemMsg.setError("Ime nije jedinstven!");
 			return false;
 		}
-		
-		if(disk.getOrganizacija() == null) {
+
+		if (disk.getOrganizacija() == null) {
 			problemMsg.setError("Organizacija mora da postolji!");
 			return false;
 		}
 		Organizacija organizacija = AllLists.organizacije.find(disk.getOrganizacija());
-		if(organizacija == null) {
+		if (organizacija == null) {
 			problemMsg.setError("Ne postolji organizacija!");
 			return false;
 		}
-		
-		if(disk.getTip() == null || disk.getTip().equals("")) {
+
+		if (disk.getTip() == null || disk.getTip().equals("")) {
 			problemMsg.setError("Tip mora da postolji!");
 			return false;
 		}
 		try {
 			Tip.valueOf(disk.getTip());
-		}catch (Exception e) {
+		} catch (Exception e) {
 			problemMsg.setError("Tip je loseg formata!");
 			return false;
 		}
-		
-		if(disk.getKapacitet() <= 0) {
+
+		if (disk.getKapacitet() <= 0) {
 			problemMsg.setError("Kapacitet diska u GB mora biti vece od nule!");
 			return false;
 		}
-		
-		if(disk.getVirtualnaMasina() == null) {
+
+		if (disk.getVirtualnaMasina() == null) {
 			problemMsg.setError("Virtualan masina mora da postolji!");
 			return false;
 		}
 		VirtualnaMasina virtualnaMasina = AllLists.virtualneMasine.find(disk.getVirtualnaMasina());
-		if(virtualnaMasina == null) {
+		if (virtualnaMasina == null) {
 			problemMsg.setError("Ne postolji virtualna masina!");
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
 	private Disk makeDisk(DiskDTO disk) {
 		Disk madeDisk = new Disk();
-		
+
 		madeDisk.setIme(disk.getIme());
 		Organizacija organizacija = AllLists.organizacije.find(disk.getOrganizacija());
 		madeDisk.setOrganizacija(organizacija);
-		organizacija.getDiskovi().add(madeDisk);
+		organizacija.addDisk(madeDisk);
 		madeDisk.setTip(Tip.valueOf(disk.getTip()));
 		madeDisk.setKapacitet(disk.getKapacitet());
 		VirtualnaMasina virtualnaMasina = AllLists.virtualneMasine.find(disk.getVirtualnaMasina());
 		madeDisk.setVirtualanaMasina(virtualnaMasina);
-		virtualnaMasina.getDiskovi().add(madeDisk);
-		
+		virtualnaMasina.addDisk(madeDisk);
+
 		return madeDisk;
 	}
 
-	public List<Disk> getDiskovi() {
+	public HashMap<String, Disk> getDiskovi() {
 		return diskovi;
 	}
 
-	public void setDiskovi(List<Disk> diskovi) {
+	public void setDiskovi(HashMap<String, Disk> diskovi) {
 		this.diskovi = diskovi;
 	}
 

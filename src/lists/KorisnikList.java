@@ -1,6 +1,7 @@
 package lists;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import app.AllLists;
@@ -12,20 +13,16 @@ import dto.KorisnikDTO;
 
 //TODO ne menjati organizaciju
 public class KorisnikList {
-	private List<Korisnik> korisnici = new ArrayList<>();
+	private HashMap<String , Korisnik> korisnici = new HashMap<>();
 	public JsonError problemMsg = new JsonError();
 	
 	public List<Korisnik> getByOrganization(Organizacija organization) {
 		if(organization == null) {
-			return korisnici;
+			return new ArrayList<>(korisnici.values());
+		} 
+		else {
+			return new ArrayList<>(organization.getKorisnici().values());
 		}
-		List<Korisnik> sameOrgKorisnici = new ArrayList<>();
-		for (Korisnik korisnik : korisnici) {
-			if(korisnik.getOrganizacija() == organization ) {
-				sameOrgKorisnici.add(korisnik);
-			}
-		}
-		return sameOrgKorisnici;
 	}
 	
 	public boolean addKorisnik(KorisnikDTO kor) {
@@ -33,7 +30,8 @@ public class KorisnikList {
 			return false;
 		}
 		
-		korisnici.add(makeKorisnik(kor));
+		Korisnik korisnik = makeKorisnik(kor);
+		korisnici.put(korisnik.getEmail(), korisnik);
 		return true;
 	}
 	
@@ -42,12 +40,13 @@ public class KorisnikList {
 		if(stari == null) {
 			return false;
 		}
-		korisnici.remove(stari);
+		korisnici.remove(original);
 		if(!checkVAlid(kor)) {
-			korisnici.add(stari);
+			korisnici.put(stari.getEmail(), stari);
 			return false;
 		}
-		korisnici.add(makeKorisnik(kor));
+		Korisnik korisnik = makeKorisnik(kor);
+		korisnici.put(korisnik.getEmail(), korisnik);
 		return true;
 	}
 	
@@ -56,19 +55,16 @@ public class KorisnikList {
 		if(korisnik == null) {
 			return false;
 		}
-		korisnici.remove(korisnik);
-		korisnik.getOrganizacija().getKorisnici().remove(korisnik);
+		korisnici.remove(kor);
+		korisnik.getOrganizacija().removeKorisnik(korisnik);
 		return true;
 	}
 	
 	public Korisnik find(String email) {
-		for (Korisnik korisnik : korisnici) {
-			if(korisnik.getEmail().equals(email)) {
-				return korisnik;
-			}
-		}
-		problemMsg.setError("Korisnik ne postolji!");
-		return null;
+		Korisnik korisnik = korisnici.get(email);
+		if(korisnik == null)
+			problemMsg.setError("Korisnik ne postolji!");
+		return korisnik;
 	}
 	
 	private Korisnik makeKorisnik(KorisnikDTO kor) {
@@ -81,7 +77,7 @@ public class KorisnikList {
 		korisnik.setPrezime(kor.getPrezime());
 		Organizacija organizacija = AllLists.organizacije.find(kor.getOrganizacija());
 		korisnik.setOrganizacija(organizacija);
-		organizacija.getKorisnici().add(korisnik);
+		organizacija.addKorisnik(korisnik);
 		korisnik.setUloga(Uloga.valueOf(kor.getUloga()));
 		
 		return korisnik;
@@ -132,12 +128,22 @@ public class KorisnikList {
 		return true;
 	}
 
-	public List<Korisnik> getKorisnici() {
+	public HashMap<String, Korisnik> getKorisnici() {
 		return korisnici;
 	}
 
-	public void setKorisnici(List<Korisnik> korisnici) {
+	public void setKorisnici(HashMap<String, Korisnik> korisnici) {
 		this.korisnici = korisnici;
 	}
+
+	public JsonError getProblemMsg() {
+		return problemMsg;
+	}
+
+	public void setProblemMsg(JsonError problemMsg) {
+		this.problemMsg = problemMsg;
+	}
+
+
 	
 }

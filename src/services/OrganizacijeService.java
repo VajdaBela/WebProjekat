@@ -24,7 +24,7 @@ public class OrganizacijeService {
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getOrganizacije() {
 		List<OrganizacijaDTO> organizacijeDto = new ArrayList<>();
-		for (Organizacija organizacija : AllLists.organizacije.getOrganizacije()) {
+		for (Organizacija organizacija : AllLists.organizacije.getOrganizacije().values()) {
 			organizacijeDto.add(new OrganizacijaDTO(organizacija));
 		}
 		return Response

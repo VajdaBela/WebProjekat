@@ -2,20 +2,21 @@ package data;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 public class VirtualnaMasina {
 	private String ime;
 	private Organizacija organizacija;
 	private Kategorija kategorija;
-	private List<Disk> diskovi;
+	private HashMap<String, Disk> diskovi;
 	private List<Date> aktivnosti;
-	
+
 	public VirtualnaMasina() {
 		this.ime = "";
 		this.organizacija = null;
 		this.kategorija = null;
-		this.diskovi = new ArrayList<Disk>();
+		this.diskovi = new HashMap<>();
 		this.aktivnosti = new ArrayList<Date>();
 	}
 
@@ -25,7 +26,7 @@ public class VirtualnaMasina {
 		this.organizacija = organizacija;
 		this.kategorija = kategorija;
 	}
-	
+
 	public String getIme() {
 		return ime;
 	}
@@ -50,11 +51,11 @@ public class VirtualnaMasina {
 		this.kategorija = kategorija;
 	}
 
-	public List<Disk> getDiskovi() {
+	public HashMap<String, Disk> getDiskovi() {
 		return diskovi;
 	}
 
-	public void setDiskovi(List<Disk> diskovi) {
+	public void setDiskovi(HashMap<String, Disk> diskovi) {
 		this.diskovi = diskovi;
 	}
 
@@ -64,6 +65,14 @@ public class VirtualnaMasina {
 
 	public void setAktivnosti(List<Date> aktivnosti) {
 		this.aktivnosti = aktivnosti;
+	}
+	
+	public void addDisk(Disk disk) {
+		this.diskovi.put(disk.getIme(), disk);
+	}
+	
+	public void removeDisk(Disk disk) {
+		this.diskovi.remove(disk.getIme());
 	}
 
 }

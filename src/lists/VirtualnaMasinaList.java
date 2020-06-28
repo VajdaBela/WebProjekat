@@ -1,6 +1,7 @@
 package lists;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import app.AllLists;
@@ -11,117 +12,120 @@ import data.VirtualnaMasina;
 import dto.VirtualnaMasinaDTO;
 
 public class VirtualnaMasinaList {
-	private List<VirtualnaMasina> virtualneMasine = new ArrayList<>();
+	// TODO change to hashmaps
+	private HashMap<String, VirtualnaMasina> virtualneMasine = new HashMap<>();
 	public JsonError problemMsg = new JsonError();
 
 	public List<VirtualnaMasina> getByOrganization(Organizacija organizacija) {
-		if(organizacija == null) {
-			return virtualneMasine;
+		if (organizacija == null) {
+			return new ArrayList<>(virtualneMasine.values());
+		} else {
+			return new ArrayList<>(organizacija.getMasine().values());
 		}
-		List<VirtualnaMasina> sameOrgVirtualneMasine = new ArrayList<>();
-		for (VirtualnaMasina virtualnaMasina : virtualneMasine) {
-			if(virtualnaMasina.getOrganizacija() == organizacija) {
-				sameOrgVirtualneMasine.add(virtualnaMasina);
-			}
-		}
-		return sameOrgVirtualneMasine;
 	}
-	
+
 	public boolean addVirtualnaMasina(VirtualnaMasinaDTO virm) {
-		if(!checkValid(virm)) {
+		if (!checkValid(virm)) {
 			return false;
 		}
-		virtualneMasine.add(makeVirtualnaMasina(virm));
+		VirtualnaMasina masina = makeVirtualnaMasina(virm);
+		virtualneMasine.put(masina.getIme(), masina);
 		return true;
 	}
-	
+
 	public boolean changeVirtualnaMasina(VirtualnaMasinaDTO virm, String original) {
 		VirtualnaMasina stari = find(original);
-		if(stari == null) {
+		if (stari == null) {
 			return false;
 		}
-		virtualneMasine.remove(stari);
-		if(!checkValid(virm)) {
-			virtualneMasine.add(stari);
+		virtualneMasine.remove(original);
+		if (!checkValid(virm)) {
+			virtualneMasine.put(stari.getIme(), stari);
 			return false;
 		}
-		virtualneMasine.add(makeVirtualnaMasina(virm));
+		VirtualnaMasina masina = makeVirtualnaMasina(virm);
+		virtualneMasine.put(masina.getIme(), masina);
 		return true;
 	}
-	
+
 	public boolean deleteVirtualnaMasina(String ime) {
 		VirtualnaMasina virtualnaMasina = find(ime);
-		if(virtualnaMasina == null) {
+		if (virtualnaMasina == null) {
 			return false;
 		}
-		virtualneMasine.remove(virtualnaMasina);
-		virtualnaMasina.getOrganizacija().getMasine().remove(virtualnaMasina);
+		virtualneMasine.remove(ime);
+		virtualnaMasina.getOrganizacija().removeMasina(virtualnaMasina);
 		return true;
 	}
-	
-	//TODO change makes references vanish
+
+	// TODO change makes references vanish
 	private VirtualnaMasina makeVirtualnaMasina(VirtualnaMasinaDTO virm) {
 		VirtualnaMasina virtualnaMasina = new VirtualnaMasina();
-		
+
 		virtualnaMasina.setIme(virm.getIme());
 		Organizacija organizacija = AllLists.organizacije.find(virm.getOrganizacija());
 		virtualnaMasina.setOrganizacija(organizacija);
-		organizacija.getMasine().add(virtualnaMasina);
+		organizacija.addMasina(virtualnaMasina);
 		Kategorija kategorija = AllLists.kategorije.find(virm.getKategorija());
 		virtualnaMasina.setKategorija(kategorija);
-		
+
 		return virtualnaMasina;
 	}
-	
+
 	public boolean checkValid(VirtualnaMasinaDTO virm) {
-		if(virm.getIme() == null || virm.getIme().equals("")) {
+		if (virm.getIme() == null || virm.getIme().equals("")) {
 			problemMsg.setError("Ime mora da postolji!");
 			return false;
 		}
-		if(find(virm.getIme()) != null) {
+		if (find(virm.getIme()) != null) {
 			problemMsg.setError("Ime nije jedinstven!");
 			return false;
 		}
-		
-		if(virm.getOrganizacija() == null) {
+
+		if (virm.getOrganizacija() == null) {
 			problemMsg.setError("Organizacija mora da postolji!");
 			return false;
 		}
 		Organizacija organizacija = AllLists.organizacije.find(virm.getOrganizacija());
-		if(organizacija == null) {
+		if (organizacija == null) {
 			problemMsg.setError("Ne postolji organizacija!");
 			return false;
 		}
-		
-		if(virm.getKategorija() == null) {
+
+		if (virm.getKategorija() == null) {
 			problemMsg.setError("Kategorija mora da postolji!");
 			return false;
 		}
 		Kategorija kategorija = AllLists.kategorije.find(virm.getKategorija());
-		if(kategorija == null) {
+		if (kategorija == null) {
 			problemMsg.setError("Ne postolji kategorija!");
 			return false;
 		}
-		
+
 		return true;
 	}
-	
+
 	public VirtualnaMasina find(String ime) {
-		for (VirtualnaMasina virtualnaMasina : virtualneMasine) {
-			if(virtualnaMasina.getIme().equals(ime)) {
-				return virtualnaMasina;
-			}
-		}
-		problemMsg.setError("Virtualna masina ne postolji!");
-		return null;
+		VirtualnaMasina masina = virtualneMasine.get(ime);
+		if (masina == null)
+			problemMsg.setError("Virtualna masina ne postolji!");
+		return masina;
 	}
-	
-	public List<VirtualnaMasina> getVirtualneMasine() {
+
+	public HashMap<String, VirtualnaMasina> getVirtualneMasine() {
 		return virtualneMasine;
 	}
 
-	public void setVirtualneMasine(List<VirtualnaMasina> virtualneMasine) {
+	public void setVirtualneMasine(HashMap<String, VirtualnaMasina> virtualneMasine) {
 		this.virtualneMasine = virtualneMasine;
+	}
+
+	public JsonError getProblemMsg() {
+		return problemMsg;
+	}
+
+	public void setProblemMsg(JsonError problemMsg) {
+		this.problemMsg = problemMsg;
 	}
 
 }

@@ -1,23 +1,22 @@
 package data;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 public class Organizacija {
 	private String ime;
 	private String opis;
 	private String logo;
-	private List<Korisnik> korisnici;
-	private List<VirtualnaMasina> masine;
-	private List<Disk> diskovi;
+	private HashMap<String, Korisnik> korisnici;
+	private HashMap<String, VirtualnaMasina> masine;
+	private HashMap<String, Disk> diskovi;
 
 	public Organizacija() {
 		this.ime = "";
 		this.opis = "";
 		this.logo = "defaultLogo.img";
-		this.korisnici = new ArrayList<>();
-		this.masine = new ArrayList<>();
-		this.diskovi = new ArrayList<>();
+		this.korisnici = new HashMap<>();
+		this.masine = new HashMap<>();
+		this.diskovi = new HashMap<>();
 	}
 
 	public Organizacija(String ime, String opis) {
@@ -50,28 +49,52 @@ public class Organizacija {
 		this.logo = logo;
 	}
 
-	public List<Korisnik> getKorisnici() {
+	public HashMap<String, Korisnik> getKorisnici() {
 		return korisnici;
 	}
 
-	public void setKorisnici(List<Korisnik> korisnici) {
+	public void setKorisnici(HashMap<String, Korisnik> korisnici) {
 		this.korisnici = korisnici;
 	}
 
-	public List<VirtualnaMasina> getMasine() {
+	public HashMap<String, VirtualnaMasina> getMasine() {
 		return masine;
 	}
 
-	public void setMasine(List<VirtualnaMasina> masine) {
+	public void setMasine(HashMap<String, VirtualnaMasina> masine) {
 		this.masine = masine;
 	}
 
-	public List<Disk> getDiskovi() {
+	public HashMap<String, Disk> getDiskovi() {
 		return diskovi;
 	}
 
-	public void setDiskovi(List<Disk> diskovi) {
+	public void setDiskovi(HashMap<String, Disk> diskovi) {
 		this.diskovi = diskovi;
+	}
+	
+	public void addKorisnik(Korisnik korisnik) {
+		this.korisnici.put(korisnik.getEmail(), korisnik);
+	}
+	
+	public void removeKorisnik(Korisnik korisnik) {
+		this.korisnici.remove(korisnik.getEmail());
+	}
+	
+	public void addMasina(VirtualnaMasina masina) {
+		this.masine.put(masina.getIme(), masina);
+	}
+	
+	public void removeMasina(VirtualnaMasina masina) {
+		this.masine.remove(masina.getIme());
+	}
+	
+	public void addDisk(Disk disk) {
+		this.diskovi.put(disk.getIme(), disk);
+	}
+	
+	public void removeDisk(Disk disk) {
+		this.diskovi.remove(disk.getIme());
 	}
 
 }
