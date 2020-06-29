@@ -43,6 +43,7 @@ public class Startup implements ServletContextListener {
 		// Context shutdown
 	}
 	
+	@SuppressWarnings("unused")
 	private void makeNewCleanFile() {
 		Organizacija organizacija1 = new Organizacija("org1", "jako dobar");
 		Organizacija organizacija2 = new Organizacija("org2", "vrlo los");
