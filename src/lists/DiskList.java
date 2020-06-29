@@ -34,9 +34,9 @@ public class DiskList {
 			diskovi.put(stari.getIme(), stari);
 			return false;
 		}
-		// TODO edit insdtead of make
-		Disk disk = makeDisk(di);
-		diskovi.put(disk.getIme(), disk);
+
+		edit(stari, di);
+		diskovi.put(stari.getIme(), stari);
 		return true;
 	}
 
@@ -121,6 +121,13 @@ public class DiskList {
 		virtualnaMasina.addDisk(madeDisk);
 
 		return madeDisk;
+	}
+	
+	private void edit(Disk disk, DiskDTO di) {
+		disk.setIme(di.getIme());
+		disk.setTip(Tip.valueOf(di.getTip()));
+		disk.setKapacitet(di.getKapacitet());
+
 	}
 
 	public HashMap<String, Disk> getDiskovi() {

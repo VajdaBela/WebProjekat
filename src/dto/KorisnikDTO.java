@@ -4,11 +4,12 @@ import data.Korisnik;
 
 public class KorisnikDTO {
 	private String email;
+	private String lozinka;
 	private String ime;
 	private String prezime;
 	private String organizacija;
 	private String uloga;
-	private String lozinka;
+	
 
 	public KorisnikDTO() {
 		super();
@@ -22,6 +23,16 @@ public class KorisnikDTO {
 		this.organizacija = korisnik.getOrganizacija() == null ? "" : korisnik.getOrganizacija().getIme();
 		this.uloga = korisnik.getUloga().toString();
 		this.lozinka = "";
+	}
+	
+	public KorisnikDTO(Korisnik korisnik, boolean internal) {
+		super();
+		this.email = korisnik.getEmail();
+		this.ime = korisnik.getIme();
+		this.prezime = korisnik.getPrezime();
+		this.organizacija = korisnik.getOrganizacija() == null ? "" : korisnik.getOrganizacija().getIme();
+		this.uloga = korisnik.getUloga().toString();
+		this.lozinka = korisnik.getLozinka();
 	}
 
 	public String getLozinka() {
