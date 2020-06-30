@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="bootstrap.min.css">
+<script src="jquery.min.js"></script>
+<style type="text/css">
+	.error {color:red;}
+	.hidden {visibility: hidden;}
+</style>
+</head>
+<body>
+<!--naviagtion-->
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+
+	<div class="navbar-nav" id="navdiv">
+		<a class="nav-item nav-link" href="#">First</a>
+	</div>
+</nav>
+<!--naviagtion end-->
+
+<form class="mx-auto" style="width: 200px;">
+	<div class="form-group">
+		<label for="email">Email address</label>
+		<input type="text" class="form-control" id="email">
+		<div class="error hidden" id="emailError">Please enter your email address.</div>
+ 	</div>
+	<div class="form-group">
+		<label for="password">Password</label>
+		<input type="password" class="form-control" id="password">
+		<div class="error hidden" id="passwordError">Please enter your password.</div>
+ 	</div>
+	<div class="form-group">
+		<input type="submit" id="submit" value="login">
+ 	</div>
+</form>
+
+<script type="text/javascript">
+	$('form').submit(function(event) {
+		var invalid = false;
+		if($("#email").val() === "") {
+			invalid = true;
+			$("#emailError").removeClass("hidden");
+		}
+		else {
+			$("#emailError").addClass("hidden");
+		}
+		if($("#password").val() === "") {
+			invalid = true;
+			$("#passwordError").removeClass("hidden");
+		}
+		else {
+			$("#passwordError").addClass("hidden");
+		}
+		var data = {
+				name: $('#email').val(),
+				password: $('#password').val(),
+		}
+		var s = JSON.stringify(data);
+		$.ajax({
+			url: "rest/login/on",
+			type: "POST",
+			data: s,
+			contentType : "application/json",
+			dataType : "json",
+			complete: function(data) {
+				console.log(data);
+				if(data.status === 200) {
+					window.location.replace("header.html");
+				}
+			}
+		});
+		console.log(data);
+		event.preventDefault();
+	});
+	
+	$.ajax({
+		url: "rest/login/on",
+		type: "POST",
+		complete: function(data) {
+			//responseJSON: KORISNIK
+			if(!(data.responseJSON === "NEULOGOVAN")) {
+				window.location.replace("header.html");
+			}
+		}
+	});
+</script>
+</body>
+</html>

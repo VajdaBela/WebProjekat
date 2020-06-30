@@ -76,6 +76,6 @@ public class Korisnik {
 	}
 
 	public enum Uloga {
-		SUPER_ADMIN, ADMIN, KORISNIK
+		SUPER_ADMIN, ADMIN, KORISNIK, NEULOGOVAN
 	}
 }
