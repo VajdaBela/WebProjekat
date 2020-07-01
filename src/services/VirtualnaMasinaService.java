@@ -3,6 +3,7 @@ package services;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -12,11 +13,15 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
 import app.AllLists;
+import app.Proveravator;
+import data.Korisnik;
+import data.Korisnik.Uloga;
 import data.Organizacija;
 import data.VirtualnaMasina;
 import dto.VirtualnaMasinaDTO;
@@ -26,17 +31,23 @@ public class VirtualnaMasinaService {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getVirtualnaMasinaByOrganizacija(@QueryParam("ime") String organizacija) {
-		Organizacija org;
-		if (organizacija == null) {
-			org = null;
-		} else {
-			org = AllLists.organizacije.find(organizacija);
+	public Response getVirtualnaMasinaByOrganizacija(@Context HttpServletRequest request, @QueryParam("ime") String organizacija) {
+		//check credentials
+		Korisnik korisnik = (Korisnik)request.getSession().getAttribute("korisnik");
+		if(!Proveravator.proveriUlogu(new Uloga[] {Uloga.SUPER_ADMIN, Uloga.ADMIN, Uloga.KORISNIK}, request)) {
+			return Response
+					.status(Status.UNAUTHORIZED)
+					.entity("Not logged in or insufficient privileges!")
+					.type(MediaType.APPLICATION_JSON)
+					.build();
 		}
-
-		if (org == null && organizacija != null) {
-			return Response.status(Status.BAD_REQUEST).entity(AllLists.organizacije.problemMsg)
-					.type(MediaType.APPLICATION_JSON).build();
+		
+		Organizacija org;
+		if(korisnik.getUloga() == Uloga.SUPER_ADMIN) {
+			org = null;
+		}
+		else {
+			org = korisnik.getOrganizacija();
 		}
 		List<VirtualnaMasinaDTO> virtualneMasineDto = new ArrayList<>();
 		for (VirtualnaMasina virtualnaMasina : AllLists.virtualneMasine.getByOrganization(org)) {

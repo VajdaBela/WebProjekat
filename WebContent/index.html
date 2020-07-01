@@ -8,6 +8,10 @@
 		$.ajax({
 			url: "rest/login/off",
 			type: "POST",
+			xhrFields: {
+			       withCredentials: true
+			    },
+		    crossDomain: true,
 			complete: function(data) {
 				console.log(data);
 			}
@@ -26,6 +30,10 @@
 			data: s,
 			contentType : "application/json",
 			dataType : "json",
+			xhrFields: {
+			       withCredentials: true
+			    },
+		    crossDomain: true,
 			complete: function(data) {
 				console.log(data);
 			}

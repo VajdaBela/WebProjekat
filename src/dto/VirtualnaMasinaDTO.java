@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import data.Kategorija;
 import data.VirtualnaMasina;
 
 public class VirtualnaMasinaDTO {
 	private String ime;
 	private String organizacija;
 	private String kategorija;
+	private Kategorija kategorijaCeo;
 	private List<Date> aktivnosti;
 
 	public VirtualnaMasinaDTO() {
@@ -21,6 +23,7 @@ public class VirtualnaMasinaDTO {
 		this.ime = virtualnaMasina.getIme();
 		this.organizacija = virtualnaMasina.getOrganizacija().getIme();
 		this.kategorija = virtualnaMasina.getKategorija().getIme();
+		this.kategorijaCeo = virtualnaMasina.getKategorija();
 		this.aktivnosti = virtualnaMasina.getAktivnosti();
 	}
 	
@@ -54,6 +57,14 @@ public class VirtualnaMasinaDTO {
 
 	public void setAktivnosti(List<Date> aktivnosti) {
 		this.aktivnosti = aktivnosti;
+	}
+
+	public Kategorija getKategorijaCeo() {
+		return kategorijaCeo;
+	}
+
+	public void setKategorijaCeo(Kategorija kategorijaCeo) {
+		this.kategorijaCeo = kategorijaCeo;
 	}
 
 }

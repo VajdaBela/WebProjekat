@@ -218,7 +218,9 @@ public class AllLists {
 			}
 			in.close();
 			
-			
+			//TODO proveriti dali vec ima SUPER_ADMIN i save-ovati ga
+			Korisnik superAdmin = new Korisnik("admin", "admin", "admin", "admin", null, Uloga.SUPER_ADMIN);
+			AllLists.korisnici.getKorisnici().put(superAdmin.getEmail(), superAdmin);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("_________________WARNING_________________");

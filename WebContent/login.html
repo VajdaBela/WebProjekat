@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>Kompot</title>
 <link rel="stylesheet" href="bootstrap.min.css">
 <script src="jquery.min.js"></script>
 <style type="text/css">
@@ -11,13 +11,24 @@
 </style>
 </head>
 <body>
+<!--check and set role-->
+<script src="/WebProjekat/checkRole.js"></script>
+<script type="text/javascript">
+checkRedirect(["NEULOGOVAN"], "SiteTemplate.html")
+</script>
+<!--check and set role end-->
+
 <!--naviagtion-->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-
-	<div class="navbar-nav" id="navdiv">
-		<a class="nav-item nav-link" href="#">First</a>
+	<a class="navbar-brand" href="#">Kompot</a>
+	<div class="navbar-collapse">
+		<ul class="navbar-nav mr-auto" id="levo">
+		</ul>
+		<ul class="navbar-nav" id="desno">
+		</ul>
 	</div>
 </nav>
+<script src="/WebProjekat/navBar.js"></script>
 <!--naviagtion end-->
 
 <form class="mx-auto" style="width: 200px;">
@@ -59,7 +70,7 @@
 		}
 		var s = JSON.stringify(data);
 		$.ajax({
-			url: "rest/login/on",
+			url: "rest/login",
 			type: "POST",
 			data: s,
 			contentType : "application/json",
@@ -67,23 +78,11 @@
 			complete: function(data) {
 				console.log(data);
 				if(data.status === 200) {
-					window.location.replace("header.html");
+					window.location.replace("SiteTemplate.html");
 				}
 			}
 		});
-		console.log(data);
 		event.preventDefault();
-	});
-	
-	$.ajax({
-		url: "rest/login/on",
-		type: "POST",
-		complete: function(data) {
-			//responseJSON: KORISNIK
-			if(!(data.responseJSON === "NEULOGOVAN")) {
-				window.location.replace("header.html");
-			}
-		}
 	});
 </script>
 </body>

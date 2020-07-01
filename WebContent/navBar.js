@@ -1,48 +1,44 @@
 function logout() {
 	$.ajax({
 		url: "rest/login/off",
-		type: "POST",
+		type: "GET",
 		complete: function(data) {
-			//responseJSON: KORISNIK
-			window.location.replace("login.html");
+			console.log(data);
+			window.location.replace("SiteTemplate.html");
 		}
 	});
 }
-
 function makeNavElem(word, link) {
-	return $("<li></li>").addClass("nav-item").append($("<a></a>").addClass("nav-link").attr("href", link).text(word));
+	return $("<li></li>").addClass("nav-item").append(
+			$("<a></a>").addClass("nav-link").attr("href", link).text(word));
 }
-
-function setKorisnikNavBar() {
-	$("#desno").append(makeNavElem("Logout", "javascript:logout()"));
-	$("#levo").append(makeNavElem("Korisnik", "#"));
-}
-
-function setNavBar(type) {
-	switch(type) {
+$(document).ready(function () {
+	switch (uloga) {
 	case "KORISNIK":
-		setKorisnikNavBar();
+		$("#levo").append(makeNavElem("Virtualne Masine", "#"));
+		$("#levo").append(makeNavElem("Diskovi", "#"));
+		$("#levo").append(makeNavElem("Profil", "#"));
+		$("#desno").append(makeNavElem("Logout", "javascript:logout()"));
+		break;
+	case "ADMIN":
+		$("#levo").append(makeNavElem("Korisnici", "#"));
+		$("#levo").append(makeNavElem("Virtualne Masine", "#"));
+		$("#levo").append(makeNavElem("Diskovi", "#"));
+		$("#levo").append(makeNavElem("Organizacija", "#"));
+		$("#levo").append(makeNavElem("Profil", "#"));
+		$("#levo").append(makeNavElem("Mesecna Cena", "#"));
+		$("#desno").append(makeNavElem("Logout", "javascript:logout()"));
+		break;
+	case "SUPER_ADMIN":
+		$("#levo").append(makeNavElem("Organizacije", "#"));
+		$("#levo").append(makeNavElem("Korisnici", "#"));
+		$("#levo").append(makeNavElem("Virtualne Masine", "#"));
+		$("#levo").append(makeNavElem("Diskovi", "#"));
+		$("#levo").append(makeNavElem("Kategorije", "#"));
+		$("#levo").append(makeNavElem("Profil", "#"));
+		$("#desno").append(makeNavElem("Logout", "javascript:logout()"));
 		break;
 	default:
-		
-	}
-}
 
-function potentialRedirect(type) {
-	
-	if(type === "NEULOGOVAN") {
-		window.location.replace("login.html");
-	}
-}
-
-$.ajax({
-	url: "rest/login/on",
-	type: "POST",
-	complete: function(data) {
-		//responseJSON: KORISNIK
-		potentialRedirect(data.responseJSON);
-		setNavBar(data.responseJSON);
 	}
 });
-
-
