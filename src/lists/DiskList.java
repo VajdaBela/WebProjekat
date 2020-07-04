@@ -1,6 +1,8 @@
 package lists;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import app.AllLists;
 import app.JsonError;
@@ -13,6 +15,14 @@ import dto.DiskDTO;
 public class DiskList {
 	private HashMap<String, Disk> diskovi = new HashMap<>();
 	public JsonError problemMsg = new JsonError();
+	
+	public List<Disk> getByOrganization(Organizacija organizacija) {
+		if(organizacija == null) {
+			return new ArrayList<>(diskovi.values());
+		} else {
+			return new ArrayList<>(organizacija.getDiskovi().values());
+		}
+	}
 
 	public boolean addDisk(DiskDTO disk) {
 		if (!checkValid(disk)) {

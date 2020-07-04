@@ -16,14 +16,14 @@ $(document).ready(function () {
 	switch (uloga) {
 	case "KORISNIK":
 		$("#levo").append(makeNavElem("Virtualne Masine", "/WebProjekat/liste/VirtualneMasine.html"));
-		$("#levo").append(makeNavElem("Diskovi", "#"));
+		$("#levo").append(makeNavElem("Diskovi", "/WebProjekat/liste/Diskovi.html"));
 		$("#levo").append(makeNavElem("Profil", "#"));
 		$("#desno").append(makeNavElem("Logout", "javascript:logout()"));
 		break;
 	case "ADMIN":
 		$("#levo").append(makeNavElem("Korisnici", "#"));
 		$("#levo").append(makeNavElem("Virtualne Masine", "/WebProjekat/liste/VirtualneMasine.html"));
-		$("#levo").append(makeNavElem("Diskovi", "#"));
+		$("#levo").append(makeNavElem("Diskovi", "/WebProjekat/liste/Diskovi.html"));
 		$("#levo").append(makeNavElem("Organizacija", "#"));
 		$("#levo").append(makeNavElem("Profil", "#"));
 		$("#levo").append(makeNavElem("Mesecna Cena", "#"));
@@ -33,8 +33,8 @@ $(document).ready(function () {
 		$("#levo").append(makeNavElem("Organizacije", "#"));
 		$("#levo").append(makeNavElem("Korisnici", "#"));
 		$("#levo").append(makeNavElem("Virtualne Masine", "/WebProjekat/liste/VirtualneMasine.html"));
-		$("#levo").append(makeNavElem("Diskovi", "#"));
-		$("#levo").append(makeNavElem("Kategorije", "#"));
+		$("#levo").append(makeNavElem("Diskovi", "/WebProjekat/liste/Diskovi.html"));
+		$("#levo").append(makeNavElem("Kategorije", "/WebProjekat/liste/Kategorije.html"));
 		$("#levo").append(makeNavElem("Profil", "#"));
 		$("#desno").append(makeNavElem("Logout", "javascript:logout()"));
 		break;

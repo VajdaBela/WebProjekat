@@ -31,8 +31,7 @@ public class VirtualnaMasinaService {
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getVirtualnaMasinaByOrganizacija(@Context HttpServletRequest request, @QueryParam("ime") String organizacija) {
-		//check credentials
+	public Response getVirtualnaMasinaByOrganizacija(@Context HttpServletRequest request) {
 		Korisnik korisnik = (Korisnik)request.getSession().getAttribute("korisnik");
 		if(!Proveravator.proveriUlogu(new Uloga[] {Uloga.SUPER_ADMIN, Uloga.ADMIN, Uloga.KORISNIK}, request)) {
 			return Response

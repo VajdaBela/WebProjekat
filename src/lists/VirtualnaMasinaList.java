@@ -12,7 +12,6 @@ import data.VirtualnaMasina;
 import dto.VirtualnaMasinaDTO;
 
 public class VirtualnaMasinaList {
-	// TODO change to hashmaps
 	private HashMap<String, VirtualnaMasina> virtualneMasine = new HashMap<>();
 	public JsonError problemMsg = new JsonError();
 
