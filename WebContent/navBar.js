@@ -21,7 +21,7 @@ $(document).ready(function () {
 		$("#desno").append(makeNavElem("Logout", "javascript:logout()"));
 		break;
 	case "ADMIN":
-		$("#levo").append(makeNavElem("Korisnici", "#"));
+		$("#levo").append(makeNavElem("Korisnici", "/WebProjekat/liste/Korisnici.html"));
 		$("#levo").append(makeNavElem("Virtualne Masine", "/WebProjekat/liste/VirtualneMasine.html"));
 		$("#levo").append(makeNavElem("Diskovi", "/WebProjekat/liste/Diskovi.html"));
 		$("#levo").append(makeNavElem("Organizacija", "#"));
@@ -31,7 +31,7 @@ $(document).ready(function () {
 		break;
 	case "SUPER_ADMIN":
 		$("#levo").append(makeNavElem("Organizacije", "/WebProjekat/liste/Organizacije.html"));
-		$("#levo").append(makeNavElem("Korisnici", "#"));
+		$("#levo").append(makeNavElem("Korisnici", "/WebProjekat/liste/Korisnici.html"));
 		$("#levo").append(makeNavElem("Virtualne Masine", "/WebProjekat/liste/VirtualneMasine.html"));
 		$("#levo").append(makeNavElem("Diskovi", "/WebProjekat/liste/Diskovi.html"));
 		$("#levo").append(makeNavElem("Kategorije", "/WebProjekat/liste/Kategorije.html"));

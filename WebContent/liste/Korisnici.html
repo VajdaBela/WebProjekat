@@ -10,7 +10,7 @@
 	<!--check and set role-->
 	<script src="/WebProjekat/checkRole.js"></script>
 	<script type="text/javascript">
-		checkRedirect([ "KORISNIK", "ADMIN", "SUPER_ADMIN" ],
+		checkRedirect([ "ADMIN", "SUPER_ADMIN" ],
 				"/WebProjekat/login.html")
 	</script>
 	<!--check and set role end-->
@@ -33,18 +33,21 @@
 			<table class="table table-hover">
 				<thead class="thead-light">
 					<tr id="header">
+						<th>Email</th>
 						<th>Ime</th>
-						<th>Kapacitet</th>
-                        <th>Virtualna Masina</th>
+						<th>Prezime</th>
 					</tr>
 				</thead>
 				<tbody id="content">
 				</tbody>
 			</table>
 			<script type="text/javascript">
+				if (uloga === "SUPER_ADMIN") {
+					$("#header").append($("<th></th>").text("Organizacija"));
+				}
 
 				$.ajax({
-					url : "/WebProjekat/rest/diskovi",
+					url : "/WebProjekat/rest/korisnici",
 					type : "GET",
 					complete : function(data) {
 						console.log(data);
@@ -53,18 +56,22 @@
 					}
 				});
 
-				function fillTable(diskovi) {
-					for (var i = 0; i < diskovi.length; ++i) {
-						var disk = diskovi[i];
+				function fillTable(korisnici) {
+					for (var i = 0; i < korisnici.length; ++i) {
+						var korisnik = korisnici[i];
 						var element = $("<tr></tr>").attr(
 								"onclick",
-								"javascript:redirect('/WebProjekat/pojedinacne/Disk.html?ime="
-										+ disk.ime + "')");
-						element.append($("<td></td>").text(disk.ime));
+								"javascript:redirect('/WebProjekat/pojedinacne/Korisnik.html?email="
+										+ korisnik.email + "')");
+						element.append($("<td></td>").text(korisnik.email));
 						element.append($("<td></td>").text(
-                            disk.kapacitet))
+                            korisnik.ime))
 						element.append($("<td></td>").text(
-                            disk.virtualnaMasina))
+                            korisnik.prezime))
+						if (uloga === "SUPER_ADMIN") {
+							element.append($("<td></td>").text(
+                                korisnik.organizacija))
+						}
 						$("#content").append(element);
 					}
 				}
@@ -75,11 +82,11 @@
 			</script>
 			<!--table end-->
 		</div>
-        <div class="row container-fluid" id="forAdd">
+		<div class="row container-fluid" id="forAdd">
         </div>
         <script>
             if(!(uloga === "KORISNIK")) {
-                $('#forAdd').append($('<a class="btn btn-primary mx-auto"href="/WebProjekat/pojedinacne/VirtualnaMasina.html">+ Add</a>'))
+                $('#forAdd').append($('<a class="btn btn-primary mx-auto"href="/WebProjekat/pojedinacne/Korisnik.html">+ Add</a>'))
             }
         </script>
 	</div>
