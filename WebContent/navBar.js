@@ -1,10 +1,10 @@
 function logout() {
 	$.ajax({
-		url: "rest/login/off",
+		url: "/WebProjekat/rest/login/off",
 		type: "GET",
 		complete: function(data) {
 			console.log(data);
-			window.location.replace("SiteTemplate.html");
+			window.location.replace("/WebProjekat/login.html");
 		}
 	});
 }
@@ -15,14 +15,14 @@ function makeNavElem(word, link) {
 $(document).ready(function () {
 	switch (uloga) {
 	case "KORISNIK":
-		$("#levo").append(makeNavElem("Virtualne Masine", "#"));
+		$("#levo").append(makeNavElem("Virtualne Masine", "/WebProjekat/liste/VirtualneMasine.html"));
 		$("#levo").append(makeNavElem("Diskovi", "#"));
 		$("#levo").append(makeNavElem("Profil", "#"));
 		$("#desno").append(makeNavElem("Logout", "javascript:logout()"));
 		break;
 	case "ADMIN":
 		$("#levo").append(makeNavElem("Korisnici", "#"));
-		$("#levo").append(makeNavElem("Virtualne Masine", "#"));
+		$("#levo").append(makeNavElem("Virtualne Masine", "/WebProjekat/liste/VirtualneMasine.html"));
 		$("#levo").append(makeNavElem("Diskovi", "#"));
 		$("#levo").append(makeNavElem("Organizacija", "#"));
 		$("#levo").append(makeNavElem("Profil", "#"));
@@ -32,7 +32,7 @@ $(document).ready(function () {
 	case "SUPER_ADMIN":
 		$("#levo").append(makeNavElem("Organizacije", "#"));
 		$("#levo").append(makeNavElem("Korisnici", "#"));
-		$("#levo").append(makeNavElem("Virtualne Masine", "#"));
+		$("#levo").append(makeNavElem("Virtualne Masine", "/WebProjekat/liste/VirtualneMasine.html"));
 		$("#levo").append(makeNavElem("Diskovi", "#"));
 		$("#levo").append(makeNavElem("Kategorije", "#"));
 		$("#levo").append(makeNavElem("Profil", "#"));

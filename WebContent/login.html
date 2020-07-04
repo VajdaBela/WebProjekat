@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <title>Kompot</title>
-<link rel="stylesheet" href="bootstrap.min.css">
-<script src="jquery.min.js"></script>
+<link rel="stylesheet" href="/WebProjekat/bootstrap.min.css">
+<script src="/WebProjekat/jquery.min.js"></script>
 <style type="text/css">
 	.error {color:red;}
 	.hidden {visibility: hidden;}
@@ -14,22 +14,20 @@
 <!--check and set role-->
 <script src="/WebProjekat/checkRole.js"></script>
 <script type="text/javascript">
-checkRedirect(["NEULOGOVAN"], "SiteTemplate.html")
+checkRedirect(["NEULOGOVAN"], "/WebProjekat/liste/VirtualneMasine.html")
 </script>
 <!--check and set role end-->
 
-<!--naviagtion-->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-	<a class="navbar-brand" href="#">Kompot</a>
-	<div class="navbar-collapse">
+	<!--naviagtion-->
+	<nav class="navbar navbar-expand navbar-light bg-light">
+		<a class="navbar-brand" href="#">Kompot</a>
 		<ul class="navbar-nav mr-auto" id="levo">
 		</ul>
 		<ul class="navbar-nav" id="desno">
 		</ul>
-	</div>
-</nav>
-<script src="/WebProjekat/navBar.js"></script>
-<!--naviagtion end-->
+	</nav>
+	<script src="/WebProjekat/navBar.js"></script>
+	<!--naviagtion end-->
 
 <form class="mx-auto" style="width: 200px;">
 	<div class="form-group">
@@ -43,7 +41,7 @@ checkRedirect(["NEULOGOVAN"], "SiteTemplate.html")
 		<div class="error hidden" id="passwordError">Please enter your password.</div>
  	</div>
 	<div class="form-group">
-		<input type="submit" id="submit" value="login">
+		<input class="btn btn-primary" type="submit" id="submit" value="login">
  	</div>
 </form>
 
@@ -70,7 +68,7 @@ checkRedirect(["NEULOGOVAN"], "SiteTemplate.html")
 		}
 		var s = JSON.stringify(data);
 		$.ajax({
-			url: "rest/login",
+			url: "/WebProjekat/rest/login",
 			type: "POST",
 			data: s,
 			contentType : "application/json",
@@ -78,7 +76,7 @@ checkRedirect(["NEULOGOVAN"], "SiteTemplate.html")
 			complete: function(data) {
 				console.log(data);
 				if(data.status === 200) {
-					window.location.replace("SiteTemplate.html");
+					window.location.replace("/WebProjekat/liste/VirtualneMasine.html");
 				}
 			}
 		});

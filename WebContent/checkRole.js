@@ -1,6 +1,6 @@
 uloga = null;
 $.ajax({
-	url: "rest/login",
+	url: "/WebProjekat/rest/login",
 	async: false,
 	type: "GET",
 	complete: function(data) {

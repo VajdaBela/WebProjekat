@@ -4,10 +4,11 @@ import javax.servlet.http.HttpServletRequest;
 
 import data.Korisnik;
 import data.Korisnik.Uloga;
+import services.LoginService;
 
 public class Proveravator {
 	public static boolean proveriUlogu(Uloga dozvoljene[], HttpServletRequest request) {
-		Korisnik korisnik = (Korisnik)request.getSession().getAttribute("korisnik");
+		Korisnik korisnik = (Korisnik)request.getSession().getAttribute(LoginService.korisnikAttr);
 		if(korisnik == null) {
 			return false;
 		}

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Kompot</title>
+<link rel="stylesheet" href="/WebProjekat/bootstrap.min.css">
+<script src="/WebProjekat/jquery.min.js"></script>
+<style type="text/css">
+	.error {color:red;}
+	.hidden {visibility: hidden;}
+</style>
+</head>
+<body>
+	<!--check and set role-->
+	<script src="/WebProjekat/checkRole.js"></script>
+	<script type="text/javascript">
+		checkRedirect([ "KORISNIK", "ADMIN", "SUPER_ADMIN" ],
+				"/WebProjekat/login.html")
+	</script>
+	<!--check and set role end-->
+
+	<!--naviagtion-->
+	<nav class="navbar navbar-expand navbar-light bg-light">
+		<a class="navbar-brand" href="#">Kompot</a>
+		<ul class="navbar-nav mr-auto" id="levo">
+		</ul>
+		<ul class="navbar-nav" id="desno">
+		</ul>
+	</nav>
+	<script src="/WebProjekat/navBar.js"></script>
+	<!--naviagtion end-->
+
+	<div class="container-fluid mt-2">
+		<div class="row px-2">
+
+			<!--filtering form-->
+			<div class="container-fluid text-wrap col-2">
+				<form action="#">
+					<!--broj jezgara-->
+					<div class="form-group">
+						<label for="jezgraod">Broj jezgara od:</label> <input type="text"
+                            class="form-control" id="jezgraod">
+                            <div class="error hidden" id="odJezgraError">Invalid number.</div>
+					</div>
+					<div class="form-group">
+						<label for="jezgrado">do:</label> <input type="text"
+                            class="form-control" id="jezgrado">
+                            <div class="error hidden" id="doJezgraError">Invalid number.</div>
+					</div>
+
+					<!--broj ram u gb-->
+					<div class="form-group">
+						<label for="ramod">Kolicina rama u GB od:</label> <input type="text"
+                            class="form-control" id="ramod">
+                            <div class="error hidden" id="odRAMError">Invalid number.</div>
+					</div>
+					<div class="form-group">
+						<label for="ramdo">do:</label> <input type="text"
+                            class="form-control" id="ramdo">
+                            <div class="error hidden" id="doRAMError">Invalid number.</div>
+					</div>
+
+					<!--broj gpu jezgara-->
+					<div class="form-group">
+						<label for="gpuod">Broj GPU jezgara od:</label> <input type="text"
+                            class="form-control" id="gpuod">
+                            <div class="error hidden" id="odGPUError">Invalid number.</div>
+					</div>
+					<div class="form-group">
+						<label for="gpudo">do:</label> <input type="text"
+                            class="form-control" id="gpudo">
+                            <div class="error hidden" id="doGPUError">Invalid number.</div>
+					</div>
+
+					<!--ime VM-->
+					<div class="form-group">
+						<label for="ime">Ime:</label> <input type="text"
+							class="form-control" id="ime">
+					</div>
+
+					<div class="form-group">
+						<input type="submit" class="btn btn-primary" id="submit"
+							value="filter">
+					</div>
+                </form>
+                
+				<script>
+					$('form').submit(function(event) {
+                        var table = fileter();
+                        if(!(table === null)) {
+                            $('#content').empty();
+                            fillTable(table);
+                        }
+						event.preventDefault();
+					});
+                    function foo(num, arr) {
+
+                    }
+                    function odJezgra(num, arr) {
+                        var i = arr.length;
+                        while(i--) {
+                            if(arr[i].kategorijaCeo.brJezgara < num) {
+                                arr.splice(i, 1);
+                            }
+                        }
+                    }
+                    function doJezgra(num, arr) {
+                        var i = arr.length;
+                        while(i--) {
+                            if(arr[i].kategorijaCeo.brJezgara > num) {
+                                arr.splice(i, 1);
+                            }
+                        }
+                    }
+                    function odRAM(num, arr) {
+                        var i = arr.length;
+                        while(i--) {
+                            if(arr[i].kategorijaCeo.ram < num) {
+                                arr.splice(i, 1);
+                            }
+                        }
+                    }
+                    function doRAM(num, arr) {
+                        var i = arr.length;
+                        while(i--) {
+                            if(arr[i].kategorijaCeo.ram > num) {
+                                arr.splice(i, 1);
+                            }
+                        }
+                    }
+                    function odGPU(num, arr) {
+                        var i = arr.length;
+                        while(i--) {
+                            if(arr[i].kategorijaCeo.gpu < num) {
+                                arr.splice(i, 1);
+                            }
+                        }
+                    }
+                    function doGPU(num, arr) {
+                        var i = arr.length;
+                        while(i--) {
+                            if(arr[i].kategorijaCeo.gpu > num) {
+                                arr.splice(i, 1);
+                            }
+                        }
+                    }
+                    function hasStr(str, arr) {
+                        var i = arr.length;
+                        while(i--) {
+                            if(!arr[i].ime.includes(str)) {
+                                arr.splice(i, 1);
+                            }
+                        }
+                    }
+                    function checkNumber(element, err, cut, arr) {
+                        var num = parseInt($(element).val())
+                        if(!($(element).val() === '')) {
+                            if(Number.isNaN(num)) {
+                                $(err).removeClass("hidden");
+                               return false;
+                            }
+                            cut(num, arr);
+                        }
+                        $(err).addClass("hidden");
+                        return true;
+                    }
+                    function fileter() {
+
+                        //copy array
+                        var filteredElements = []
+                        for(var i = 0; i < tableData.length; ++i) {
+                            filteredElements.push(tableData[i])
+                        }
+                        
+                        var bad = false;
+                        if(!checkNumber('#jezgraod', '#odJezgraError', odJezgra, filteredElements)){
+                            bad = true;
+                        }
+                        if(!checkNumber('#ramod', '#odRAMError', odRAM, filteredElements)){
+                            bad = true;
+                        }
+                        if(!checkNumber('#gpuod', '#odGPUError', odGPU, filteredElements)){
+                            bad = true;
+                        }
+                        if(!checkNumber('#jezgrado', '#doJezgraError', doJezgra, filteredElements)){
+                            bad = true;
+                        }
+                        if(!checkNumber('#ramdo', '#doRAMError', doRAM, filteredElements)){
+                            bad = true;
+                        }
+                        if(!checkNumber('#gpudo', '#doGPUError', doGPU, filteredElements)){
+                            bad = true;
+                        }
+                        hasStr($('#ime').val(), filteredElements)
+                        
+                        if(bad) {
+                            return null
+                        }
+                        return filteredElements;
+                        
+                    }
+				</script>
+			</div>
+			<!--filter form end-->
+
+			<!--table-->
+			<table class="table table-hover col-10">
+				<thead class="thead-light">
+					<tr id="header">
+						<th>Ime</th>
+						<th>Br jezgara</th>
+						<th>RAM</th>
+						<th>GPU</th>
+					</tr>
+				</thead>
+				<tbody id="content">
+				</tbody>
+			</table>
+			<script type="text/javascript">
+				if (uloga === "SUPER_ADMIN") {
+					$("#header").append($("<th></th>").text("Organizacija"));
+				}
+
+				$.ajax({
+					url : "/WebProjekat/rest/virtualneMasine",
+					type : "GET",
+					complete : function(data) {
+						console.log(data);
+                        tableData = data.responseJSON;
+						fillTable(tableData);
+
+					}
+				});
+
+				function fillTable(masine) {
+					for (var i = 0; i < masine.length; ++i) {
+						var masina = masine[i];
+						var element = $("<tr></tr>").attr(
+								"onclick",
+								"javascript:redirect('/WebProjekat/pojedinacne/VirtualnaMasina.html?ime="
+										+ masina.ime + "')");
+						element.append($("<td></td>").text(masina.ime));
+						element.append($("<td></td>").text(
+								masina.kategorijaCeo.brJezgara))
+						element.append($("<td></td>").text(
+								masina.kategorijaCeo.ram))
+						element.append($("<td></td>").text(
+								masina.kategorijaCeo.gpu))
+						if (uloga === "SUPER_ADMIN") {
+							element.append($("<td></td>").text(
+									masina.organizacija))
+						}
+						$("#content").append(element);
+					}
+				}
+
+				function redirect(place) {
+					window.location.href = place;
+				}
+			</script>
+			<!--table end-->
+		</div>
+		<div class="row container-fluid" id="forAdd">
+        </div>
+        <script>
+            if(!(uloga === "KORISNIK")) {
+                $('#forAdd').append($('<a class="btn btn-primary mx-auto"href="/WebProjekat/pojedinacne/VirtualnaMasina.html">+ Add</a>'))
+            }
+        </script>
+	</div>
+</body>
+</html>
