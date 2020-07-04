@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Kompot</title>
+<link rel="stylesheet" href="/WebProjekat/bootstrap.min.css">
+<script src="/WebProjekat/jquery.min.js"></script>
+</head>
+<body>
+	<!--check and set role-->
+	<script src="/WebProjekat/checkRole.js"></script>
+	<script type="text/javascript">
+		checkRedirect(["SUPER_ADMIN"],
+				"/WebProjekat/login.html")
+	</script>
+	<!--check and set role end-->
+
+	<!--naviagtion-->
+	<nav class="navbar navbar-expand navbar-light bg-light">
+		<a class="navbar-brand" href="#">Kompot</a>
+		<ul class="navbar-nav mr-auto" id="levo">
+		</ul>
+		<ul class="navbar-nav" id="desno">
+		</ul>
+	</nav>
+	<script src="/WebProjekat/navBar.js"></script>
+	<!--naviagtion end-->
+
+	<div class="container-fluid mt-2">
+		<div class="row px-2">
+
+			<!--table-->
+			<table class="table table-hover">
+				<thead class="thead-light">
+					<tr id="header">
+						<th>Ime</th>
+						<th>Opis</th>
+                        <th>Logo</th>
+					</tr>
+				</thead>
+				<tbody id="content">
+				</tbody>
+			</table>
+			<script type="text/javascript">
+
+				$.ajax({
+					url : "/WebProjekat/rest/organizacije",
+					type : "GET",
+					complete : function(data) {
+						console.log(data);
+						fillTable(data.responseJSON);
+
+					}
+				});
+
+				function fillTable(organizacije) {
+					for (var i = 0; i < organizacije.length; ++i) {
+						var organizacija = organizacije[i];
+						var element = $("<tr></tr>").attr(
+								"onclick",
+								"javascript:redirect('/WebProjekat/pojedinacne/Organizacija.html?ime="
+										+ organizacija.ime + "')");
+						element.append($("<td></td>").text(organizacija.ime));
+						element.append($("<td></td>").text(
+                            organizacija.opis))
+						element.append($("<td></td>").text(
+                            organizacija.logo))
+						$("#content").append(element);
+					}
+				}
+
+				function redirect(place) {
+					window.location.href = place;
+				}
+			</script>
+			<!--table end-->
+		</div>
+        <div class="row container-fluid" id="forAdd">
+        </div>
+        <script>
+            if(!(uloga === "KORISNIK")) {
+                $('#forAdd').append($('<a class="btn btn-primary mx-auto"href="/WebProjekat/pojedinacne/Organizacija.html">+ Add</a>'))
+            }
+        </script>
+	</div>
+</body>
+</html>

@@ -21,11 +21,9 @@ import app.AllLists;
 import app.Proveravator;
 import data.Disk;
 import data.Korisnik;
-import data.Organizacija;
-import data.VirtualnaMasina;
 import data.Korisnik.Uloga;
+import data.Organizacija;
 import dto.DiskDTO;
-import dto.VirtualnaMasinaDTO;
 
 @Path("/diskovi")
 public class DiskService {

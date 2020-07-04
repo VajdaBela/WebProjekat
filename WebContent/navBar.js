@@ -30,7 +30,7 @@ $(document).ready(function () {
 		$("#desno").append(makeNavElem("Logout", "javascript:logout()"));
 		break;
 	case "SUPER_ADMIN":
-		$("#levo").append(makeNavElem("Organizacije", "#"));
+		$("#levo").append(makeNavElem("Organizacije", "/WebProjekat/liste/Organizacije.html"));
 		$("#levo").append(makeNavElem("Korisnici", "#"));
 		$("#levo").append(makeNavElem("Virtualne Masine", "/WebProjekat/liste/VirtualneMasine.html"));
 		$("#levo").append(makeNavElem("Diskovi", "/WebProjekat/liste/Diskovi.html"));
