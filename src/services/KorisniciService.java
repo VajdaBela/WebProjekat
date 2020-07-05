@@ -56,7 +56,18 @@ public class KorisniciService {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response makeKorisnik(KorisnikDTO kor) {
+	public Response makeKorisnik(@Context HttpServletRequest request, KorisnikDTO kor) {
+		Korisnik ulogovanaikorisnik = (Korisnik)request.getSession().getAttribute("korisnik");
+		if(!Proveravator.proveriUlogu(new Uloga[] {Uloga.SUPER_ADMIN, Uloga.ADMIN}, request)) {
+			return Response
+					.status(Status.UNAUTHORIZED)
+					.entity("Not logged in or insufficient privileges!")
+					.type(MediaType.APPLICATION_JSON)
+					.build();
+		}
+		if(ulogovanaikorisnik.getUloga() == Uloga.ADMIN) {
+			kor.setOrganizacija(ulogovanaikorisnik.getOrganizacija().getIme());
+		}
 		if(!AllLists.korisnici.addKorisnik(kor)) {
 			return Response
 					.status(Status.BAD_REQUEST)
@@ -90,7 +101,31 @@ public class KorisniciService {
 	@Path("{email}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response changeKorisnik(@PathParam("email") String email, KorisnikDTO kor) {
+	public Response changeKorisnik(@Context HttpServletRequest request, @PathParam("email") String email, KorisnikDTO kor) {
+		Korisnik ulogovanaikorisnik = (Korisnik)request.getSession().getAttribute("korisnik");
+		if(!Proveravator.proveriUlogu(new Uloga[] {Uloga.SUPER_ADMIN, Uloga.ADMIN}, request)) {
+			return Response
+					.status(Status.UNAUTHORIZED)
+					.entity("Not logged in or insufficient privileges!")
+					.type(MediaType.APPLICATION_JSON)
+					.build();
+		}
+		if(ulogovanaikorisnik.getUloga() == Uloga.ADMIN) {
+			boolean dobar = false;
+			for(Korisnik kori : ulogovanaikorisnik.getOrganizacija().getKorisnici().values()) {
+				if(kori.getEmail().equals(email)) {
+					dobar = true;
+					break;
+				}
+			}
+			if(!dobar) {
+				return Response
+						.status(Status.UNAUTHORIZED)
+						.entity("Not logged in or insufficient privileges!")
+						.type(MediaType.APPLICATION_JSON)
+						.build();
+			}
+		}
 		if(!AllLists.korisnici.changeKorisnik(kor, email)) {
 			return Response
 					.status(Status.BAD_REQUEST)
@@ -105,7 +140,38 @@ public class KorisniciService {
 	
 	@DELETE
 	@Path("{email}")
-	public Response deleteKorisnik(@PathParam("email") String email) {
+	public Response deleteKorisnik(@Context HttpServletRequest request, @PathParam("email") String email) {
+		Korisnik korisnik = (Korisnik)request.getSession().getAttribute(LoginService.korisnikAttr);
+		if(!Proveravator.proveriUlogu(new Uloga[] {Uloga.SUPER_ADMIN, Uloga.ADMIN}, request)) {
+			return Response
+					.status(Status.UNAUTHORIZED)
+					.entity("Not logged in or insufficient privileges!")
+					.type(MediaType.APPLICATION_JSON)
+					.build();
+		}
+		if(korisnik.getEmail().equals(email)) {
+			return Response
+					.status(Status.BAD_REQUEST)
+					.entity("Cant delete self!")
+					.type(MediaType.APPLICATION_JSON)
+					.build();
+		}
+		boolean dobar = false;
+		if(korisnik.getUloga() == Uloga.ADMIN) {
+			for(Korisnik kor : korisnik.getOrganizacija().getKorisnici().values()) {
+				if(kor.getEmail().equals(email)) {
+					dobar = true;
+					break;
+				}
+			}
+			if(!dobar) {
+				return Response
+						.status(Status.UNAUTHORIZED)
+						.entity("Not logged in or insufficient privileges!")
+						.type(MediaType.APPLICATION_JSON)
+						.build();
+			}
+		}
 		if(!AllLists.korisnici.deleteKorisnik(email)) {
 			return Response
 					.status(Status.BAD_REQUEST)
@@ -114,5 +180,35 @@ public class KorisniciService {
 					.build();
 		}
 		return Response.ok().build();
+	}
+	
+	@GET
+	@Path("/sebe")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getSebe(@Context HttpServletRequest request) {
+		return Response.ok(new KorisnikDTO((Korisnik)request.getSession().getAttribute(LoginService.korisnikAttr))).build();
+	}
+	
+	@PUT
+	@Path("/sebe")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response setSebe(@Context HttpServletRequest request, KorisnikDTO kor) {
+		Korisnik korisnik = (Korisnik)request.getSession().getAttribute(LoginService.korisnikAttr);
+		if(korisnik == null) {
+			return Response
+					.status(Status.UNAUTHORIZED)
+					.entity("Not logged in or insufficient privileges!")
+					.type(MediaType.APPLICATION_JSON)
+					.build();
+		}
+		if(!AllLists.korisnici.changeSelf(kor, korisnik)) {
+			return Response
+					.status(Status.BAD_REQUEST)
+					.entity(AllLists.korisnici.problemMsg)
+					.type(MediaType.APPLICATION_JSON)
+					.build();
+		}
+		return Response.ok(new KorisnikDTO(korisnik)).build();
 	}
 }

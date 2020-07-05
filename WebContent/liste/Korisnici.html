@@ -61,7 +61,7 @@
 						var korisnik = korisnici[i];
 						var element = $("<tr></tr>").attr(
 								"onclick",
-								"javascript:redirect('/WebProjekat/pojedinacne/Korisnik.html?email="
+								"javascript:redirect('/WebProjekat/Pogled/Korisnik.html?email="
 										+ korisnik.email + "')");
 						element.append($("<td></td>").text(korisnik.email));
 						element.append($("<td></td>").text(
@@ -86,7 +86,7 @@
         </div>
         <script>
             if(!(uloga === "KORISNIK")) {
-                $('#forAdd').append($('<a class="btn btn-primary mx-auto"href="/WebProjekat/pojedinacne/Korisnik.html">+ Add</a>'))
+                $('#forAdd').append($('<a class="btn btn-primary mx-auto"href="/WebProjekat/Add/Korisnik.html">+ Add</a>'))
             }
         </script>
 	</div>

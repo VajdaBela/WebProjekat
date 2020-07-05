@@ -26,7 +26,7 @@ public class KorisnikList {
 	}
 	
 	public boolean addKorisnik(KorisnikDTO kor) {
-		if(!checkVAlid(kor)) {
+		if(!checkVAlid(kor, true)) {
 			return false;
 		}
 		
@@ -41,12 +41,34 @@ public class KorisnikList {
 			return false;
 		}
 		korisnici.remove(original);
-		if(!checkVAlid(kor)) {
+		if(!checkVAlid(kor, false)) {
 			korisnici.put(stari.getEmail(), stari);
 			return false;
 		}
-		Korisnik korisnik = makeKorisnik(kor);
-		korisnici.put(korisnik.getEmail(), korisnik);
+		if(!kor.getLozinka().equals(""))
+			stari.setLozinka(kor.getLozinka());
+		stari.setIme(kor.getIme());
+		stari.setPrezime(kor.getPrezime());
+		stari.setUloga(Uloga.valueOf(kor.getUloga()));
+		korisnici.put(stari.getEmail(), stari);
+		return true;
+	}
+	
+	public boolean changeSelf(KorisnikDTO kor, Korisnik stari) {
+		korisnici.remove(stari.getEmail());
+		kor.setOrganizacija(stari.getOrganizacija().getIme());
+		kor.setUloga(stari.getUloga().toString());
+		if(!checkVAlid(kor, true)) {
+			korisnici.put(stari.getEmail(), stari);
+			return false;
+		}
+		if(!kor.getLozinka().equals("")) {
+			stari.setLozinka(kor.getLozinka());
+		}
+		stari.setIme(kor.getIme());
+		stari.setPrezime(kor.getPrezime());
+		stari.setEmail(kor.getEmail());
+		korisnici.put(stari.getEmail(), stari);
 		return true;
 	}
 	
@@ -83,12 +105,12 @@ public class KorisnikList {
 		return korisnik;
 	}
 	
-	private boolean checkVAlid(KorisnikDTO kor) {
-		if(kor.getEmail() == null || kor.getEmail().equals("")) {
+	private boolean checkVAlid(KorisnikDTO kor, boolean novi) {
+		if(novi && (kor.getEmail() == null || kor.getEmail().equals(""))) {
 			problemMsg.setError("Email mora da postolji!");
 			return false;
 		}
-		if(find(kor.getEmail()) != null) {
+		if(novi && find(kor.getEmail()) != null) {
 			problemMsg.setError("Email nije jedinstven!");
 			return false;
 		}
@@ -103,12 +125,12 @@ public class KorisnikList {
 			return false;
 		}
 		
-		if(kor.getOrganizacija() == null) {
+		if(novi && kor.getOrganizacija() == null) {
 			problemMsg.setError("Organizacija mora da postolji!");
 			return false;
 		}
 		Organizacija organizacija = AllLists.organizacije.find(kor.getOrganizacija());
-		if(organizacija == null)
+		if( novi && organizacija == null)
 		{
 			problemMsg.setError("Ne postolji organizacija!");
 			return false;

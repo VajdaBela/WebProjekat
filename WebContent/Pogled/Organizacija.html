@@ -35,7 +35,6 @@ console.log(params)
     </div>
     <div class="container-fluid row">
         <a class="btn btn-primary mx-2" id="change">Change</a>
-        
     </div>
     
     <script>
@@ -52,7 +51,6 @@ console.log(params)
             complete: function(data) {
                 console.log(data);
                 var organizacija = data.responseJSON;
-                var element = 
                 $('#podaci').append($("<h1></h1>").text(organizacija.ime));
                 $('#podaci').append($("<p></p>").text(organizacija.opis));
                 $('#podaci').append($("<img>").attr("src", "/WebProjekat/rest/images/" + organizacija.logo).width("300").height("300"));

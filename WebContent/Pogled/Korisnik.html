@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Kompot</title>
+<link rel="stylesheet" href="/WebProjekat/bootstrap.min.css">
+<script src="/WebProjekat/jquery.min.js"></script>
+<script src="/WebProjekat/alertBehaviour.js"></script>
+<style type="text/css">
+	.error {color:red;}
+</style>
+</head>
+<body>
+<!--check and set role-->
+<script src="/WebProjekat/checkRole.js"></script>
+<script type="text/javascript">
+checkRedirect(["SUPER_ADMIN", "ADMIN"], "/WebProjekat/login.html")
+params = getAllParams();
+console.log(params)
+</script>
+<!--check and set role end-->
+
+	<!--naviagtion-->
+	<nav class="navbar navbar-expand navbar-light bg-light">
+		<a class="navbar-brand" href="#">Kompot</a>
+		<ul class="navbar-nav mr-auto" id="levo">
+		</ul>
+		<ul class="navbar-nav" id="desno">
+		</ul>
+	</nav>
+	<script src="/WebProjekat/navBar.js"></script>
+    <!--naviagtion end-->
+    
+    <div calss="container-fluid" id="podaci">
+    </div>
+    <div class="container-fluid row">
+        <a class="btn btn-primary mx-2 text-light" id="change">Change</a>
+        <button class="btn btn-primary mx-2" onclick="deleteElement()">Delete</button>
+    </div>
+
+    <!--alerts-->
+    <div class="alert alert-danger" id="nesme" style="display: none">
+        <button type="button" class="close" data-dismiss="alert" onclick="javascript:hideAlert()">&times;</button>
+        Nemate dozvolu da obrisete ovog korisnika.
+    </div>
+    <div class="alert alert-danger" id="sebe" style="display: none">
+        <button type="button" class="close" data-dismiss="alert" onclick="javascript:hideAlert()">&times;</button>
+        Nemozete obrisati sebe.
+    </div>
+    <!--alerts end-->
+    
+    <script>
+        $('#change').attr('href', '/WebProjekat/Izmena/Korisnik.html?email=' + params.email);
+        $.ajax({
+            url: "/WebProjekat/rest/korisnici/" + params.email,
+            type: "GET",
+            complete: function(data) {
+                console.log(data);
+                var korisnik = data.responseJSON;
+                $('#podaci').append($('<h1></h1>').text(korisnik.ime + " " + korisnik.prezime));
+                $('#podaci').append($('<p></p>').text("Email: " + korisnik.email));
+                $('#podaci').append($('<p></p>').text("Organizacija: " + korisnik.organizacija));
+                $('#podaci').append($('<p></p>').text("Uloga: " + korisnik.uloga));
+            }
+        });
+
+        function deleteElement() {
+            $.ajax({
+                url: "/WebProjekat/rest/korisnici/" + params.email,
+                type: "DELETE",
+                complete: function(data) {
+                    console.log(data)
+                    if(data.status == 200) {
+                        window.location.href = "/WebProjekat/liste/Korisnici.html";
+                    }
+                    else if(data.status == 401) {
+                        $('#nesme').show();
+                    }
+                    else if(data.status == 400) {
+                        $('#sebe').show();
+                    }
+                }
+            })
+        }
+    </script>
+</body>
+</html>
