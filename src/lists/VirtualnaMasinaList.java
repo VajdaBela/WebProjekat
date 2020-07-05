@@ -58,7 +58,6 @@ public class VirtualnaMasinaList {
 		return true;
 	}
 
-	// TODO change makes references vanish
 	private VirtualnaMasina makeVirtualnaMasina(VirtualnaMasinaDTO virm) {
 		VirtualnaMasina virtualnaMasina = new VirtualnaMasina();
 
