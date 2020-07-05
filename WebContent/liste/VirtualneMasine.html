@@ -7,7 +7,6 @@
 <script src="/WebProjekat/jquery.min.js"></script>
 <style type="text/css">
 	.error {color:red;}
-	.hidden {visibility: hidden;}
 </style>
 </head>
 <body>
@@ -40,36 +39,36 @@
 					<div class="form-group">
 						<label for="jezgraod">Broj jezgara od:</label> <input type="text"
                             class="form-control" id="jezgraod">
-                            <div class="error hidden" id="odJezgraError">Invalid number.</div>
+                            <div class="error" style="display: none" id="odJezgraError">Invalid number.</div>
 					</div>
 					<div class="form-group">
 						<label for="jezgrado">do:</label> <input type="text"
                             class="form-control" id="jezgrado">
-                            <div class="error hidden" id="doJezgraError">Invalid number.</div>
+                            <div class="error" style="display: none" id="doJezgraError">Invalid number.</div>
 					</div>
 
 					<!--broj ram u gb-->
 					<div class="form-group">
 						<label for="ramod">Kolicina rama u GB od:</label> <input type="text"
                             class="form-control" id="ramod">
-                            <div class="error hidden" id="odRAMError">Invalid number.</div>
+                            <div class="error" style="display: none" id="odRAMError">Invalid number.</div>
 					</div>
 					<div class="form-group">
 						<label for="ramdo">do:</label> <input type="text"
                             class="form-control" id="ramdo">
-                            <div class="error hidden" id="doRAMError">Invalid number.</div>
+                            <div class="error" style="display: none" id="doRAMError">Invalid number.</div>
 					</div>
 
 					<!--broj gpu jezgara-->
 					<div class="form-group">
 						<label for="gpuod">Broj GPU jezgara od:</label> <input type="text"
                             class="form-control" id="gpuod">
-                            <div class="error hidden" id="odGPUError">Invalid number.</div>
+                            <div class="error" style="display: none" id="odGPUError">Invalid number.</div>
 					</div>
 					<div class="form-group">
 						<label for="gpudo">do:</label> <input type="text"
                             class="form-control" id="gpudo">
-                            <div class="error hidden" id="doGPUError">Invalid number.</div>
+                            <div class="error" style="display: none" id="doGPUError">Invalid number.</div>
 					</div>
 
 					<!--ime VM-->
@@ -153,15 +152,15 @@
                         }
                     }
                     function checkNumber(element, err, cut, arr) {
-                        var num = parseInt($(element).val())
+                        var num = parseInt($(element).val());
                         if(!($(element).val() === '')) {
                             if(Number.isNaN(num)) {
-                                $(err).removeClass("hidden");
+                                $(err).show();
                                return false;
                             }
                             cut(num, arr);
                         }
-                        $(err).addClass("hidden");
+                        $(err).hide();
                         return true;
                     }
                     function fileter() {

@@ -5,9 +5,9 @@
 <title>Kompot</title>
 <link rel="stylesheet" href="/WebProjekat/bootstrap.min.css">
 <script src="/WebProjekat/jquery.min.js"></script>
+<script src="/WebProjekat/alertBehaviour.js"></script>
 <style type="text/css">
 	.error {color:red;}
-	.hidden {visibility: hidden;}
 </style>
 </head>
 <body>
@@ -31,36 +31,43 @@ checkRedirect(["NEULOGOVAN"], "/WebProjekat/liste/VirtualneMasine.html")
 
 <form class="mx-auto" style="width: 200px;">
 	<div class="form-group">
-		<label for="email">Email address</label>
+		<label for="email">Email adresa</label>
 		<input type="text" class="form-control" id="email">
-		<div class="error hidden" id="emailError">Please enter your email address.</div>
+		<div class="error" id="emailError" style="display: none">Molimo unesite email adresu.</div>
  	</div>
 	<div class="form-group">
 		<label for="password">Password</label>
 		<input type="password" class="form-control" id="password">
-		<div class="error hidden" id="passwordError">Please enter your password.</div>
+		<div class="error" id="passwordError" style="display: none">Molimo unesite vas password.</div>
  	</div>
 	<div class="form-group">
 		<input class="btn btn-primary" type="submit" id="submit" value="login">
  	</div>
 </form>
 
+<!--alerts-->
+<div class="alert alert-success alert-danger" id="errorMsg" style="display: none">
+    <button type="button" class="close" data-dismiss="alert" onclick="javascript:hideAlert()">&times;</button>
+    Pogresna Email addressa ili password!
+</div>
+<!--alerts end-->
+
 <script type="text/javascript">
 	$('form').submit(function(event) {
 		var invalid = false;
 		if($("#email").val() === "") {
 			invalid = true;
-			$("#emailError").removeClass("hidden");
+			$("#emailError").show();
 		}
 		else {
-			$("#emailError").addClass("hidden");
+			$("#emailError").hide();
 		}
 		if($("#password").val() === "") {
 			invalid = true;
-			$("#passwordError").removeClass("hidden");
+			$("#passwordError").show();
 		}
 		else {
-			$("#passwordError").addClass("hidden");
+			$("#passwordError").hide();
 		}
 		var data = {
 				name: $('#email').val(),
@@ -77,7 +84,10 @@ checkRedirect(["NEULOGOVAN"], "/WebProjekat/liste/VirtualneMasine.html")
 				console.log(data);
 				if(data.status === 200) {
 					window.location.replace("/WebProjekat/liste/VirtualneMasine.html");
-				}
+                }
+                if(data.status === 400) {
+                    $('#errorMsg').show();
+                }
 			}
 		});
 		event.preventDefault();

@@ -40,7 +40,14 @@ public class KategorijaService {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response makeKategorija(Kategorija kat) {
+	public Response makeKategorija(@Context HttpServletRequest request, Kategorija kat) {
+		if(!Proveravator.proveriUlogu(new Uloga[] {Uloga.SUPER_ADMIN}, request)) {
+			return Response
+					.status(Status.UNAUTHORIZED)
+					.entity("Not logged in or insufficient privileges!")
+					.type(MediaType.APPLICATION_JSON)
+					.build();
+		}
 		if(!AllLists.kategorije.addKategorija(kat)) {
 			return Response
 					.status(Status.BAD_REQUEST)
@@ -56,7 +63,14 @@ public class KategorijaService {
 	@GET
 	@Path("{ime}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getKategorija(@PathParam("ime") String ime) {
+	public Response getKategorija(@Context HttpServletRequest request, @PathParam("ime") String ime) {
+		if(!Proveravator.proveriUlogu(new Uloga[] {Uloga.SUPER_ADMIN}, request)) {
+			return Response
+					.status(Status.UNAUTHORIZED)
+					.entity("Not logged in or insufficient privileges!")
+					.type(MediaType.APPLICATION_JSON)
+					.build();
+		}
 		Kategorija kat = AllLists.kategorije.find(ime);
 		if(kat == null) {
 			return Response
@@ -74,7 +88,14 @@ public class KategorijaService {
 	@Path("{ime}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response changeKategorija(@PathParam("ime") String ime, Kategorija kat) {
+	public Response changeKategorija(@Context HttpServletRequest request, @PathParam("ime") String ime, Kategorija kat) {
+		if(!Proveravator.proveriUlogu(new Uloga[] {Uloga.SUPER_ADMIN}, request)) {
+			return Response
+					.status(Status.UNAUTHORIZED)
+					.entity("Not logged in or insufficient privileges!")
+					.type(MediaType.APPLICATION_JSON)
+					.build();
+		}
 		if(!AllLists.kategorije.changeKategorija(kat, ime)) {
 			return Response
 					.status(Status.BAD_REQUEST)
@@ -87,6 +108,7 @@ public class KategorijaService {
 				.build();
 	}
 	
+	//TODO save all changes to files
 	@DELETE
 	@Path("{ime}")
 	public Response deleteKategorija(@PathParam("ime") String ime) {

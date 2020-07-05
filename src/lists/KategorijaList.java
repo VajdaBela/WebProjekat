@@ -2,8 +2,10 @@ package lists;
 
 import java.util.HashMap;
 
+import app.AllLists;
 import app.JsonError;
 import data.Kategorija;
+import data.VirtualnaMasina;
 
 public class KategorijaList {
 	private HashMap<String, Kategorija> kategorije = new HashMap<>();
@@ -34,8 +36,12 @@ public class KategorijaList {
 			kategorije.put(stari.getIme(), stari);
 			return false;
 		}
-		// TODO edit
-		kategorije.put(kat.getIme(), kat);
+		
+		stari.setIme(kat.getIme());
+		stari.setRam(kat.getRam());
+		stari.setGpu(kat.getGpu());
+		stari.setBrJezgara(kat.getBrJezgara());
+		kategorije.put(stari.getIme(), stari);
 		return true;
 	}
 
@@ -44,28 +50,38 @@ public class KategorijaList {
 		if (kat == null) {
 			return false;
 		}
-		// TODO check if used
+		for(VirtualnaMasina virtualanMasina : AllLists.virtualneMasine.getVirtualneMasine().values()) {
+			if(virtualanMasina.getKategorija() == kat) {
+				problemMsg.setError("Kategorija is in use!");
+				return false;
+			}
+		}
 		kategorije.remove(kategorija);
 		return true;
 	}
 
 	private boolean checkValid(Kategorija kat) {
 		if (kat.getIme() == null || kat.getIme().equals("")) {
-			problemMsg.setError("Ime mora da postolji!");
+			problemMsg.setError("Ime must exist!");
 			return false;
 		}
 		if (find(kat.getIme()) != null) {
-			problemMsg.setError("Ime nije jedinstven!");
+			problemMsg.setError("Ime is not unique!");
 			return false;
 		}
 
 		if (kat.getBrJezgara() <= 0) {
-			problemMsg.setError("Broj jezgara mora biti veci od nule!");
+			problemMsg.setError("Broj jezgara must be positive!");
 			return false;
 		}
 
 		if (kat.getRam() <= 0) {
-			problemMsg.setError("Kapacitet rama u GB mora biti veci od nule!");
+			problemMsg.setError("Kapacitet rama u GB must be positive!");
+			return false;
+		}
+		
+		if (kat.getGpu() < 0) {
+			problemMsg.setError("Broj GPU jezgara must not be negative!");
 			return false;
 		}
 

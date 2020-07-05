@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Kompot</title>
+<link rel="stylesheet" href="/WebProjekat/bootstrap.min.css">
+<script src="/WebProjekat/jquery.min.js"></script>
+<script src="/WebProjekat/alertBehaviour.js"></script>
+<style type="text/css">
+	.error {color:red;}
+</style>
+</head>
+<body>
+<!--check and set role-->
+<script src="/WebProjekat/checkRole.js"></script>
+<script type="text/javascript">
+checkRedirect(["SUPER_ADMIN"], "/WebProjekat/login.html")
+params = getAllParams();
+console.log(params)
+</script>
+<!--check and set role end-->
+
+	<!--naviagtion-->
+	<nav class="navbar navbar-expand navbar-light bg-light">
+		<a class="navbar-brand" href="#">Kompot</a>
+		<ul class="navbar-nav mr-auto" id="levo">
+		</ul>
+		<ul class="navbar-nav" id="desno">
+		</ul>
+	</nav>
+	<script src="/WebProjekat/navBar.js"></script>
+	<!--naviagtion end-->
+    <form class="mx-auto" style="width: 200px;">
+        <div class="form-group">
+            <label for="ime">Ime:</label>
+            <input type="text" class="form-control" id="ime">
+            <div class="error" id="imeErrorPostoji" style="display: none">Ime mora da postoji.</div>
+         </div>
+        <div class="form-group">
+            <label for="brjezgara">Broj jezgara:</label>
+            <input type="text" class="form-control" id="brjezgara">
+            <div class="error" id="brojJezgaraPostoji" style="display: none">Broj jezgara mora da postoji.</div>
+            <div class="error" id="brojJezgaraPositivan" style="display: none">Broj jezgara mora da bude pozitivan.</div>
+            <div class="error" id="brojJezgaraBroj" style="display: none">Broj jezgara mora da bude broj.</div>
+         </div>
+         <div class="form-group">
+            <label for="ram">Kolicina RAM-a u GB:</label>
+            <input type="text" class="form-control" id="ram">
+            <div class="error" id="ramPostoji" style="display: none">Kolicina RAM-a u GB mora da postoji.</div>
+            <div class="error" id="ramPositivan" style="display: none">Kolicina RAM-a u GB mora da bude pozitivan.</div>
+            <div class="error" id="ramBroj" style="display: none">Kolicina RAM-a mora da bude broj.</div>
+         </div>
+         <div class="form-group">
+            <label for="gpu">Broj GPU jezgara:</label>
+            <input type="text" class="form-control" id="gpu">
+            <div class="error" id="gpuPositivan" style="display: none">Broj GPU jezgara mora da bude pozitivan.</div>
+            <div class="error" id="gpuBroj" style="display: none">Broj GPU jezgara mora da bude broj.</div>
+         </div>
+        <div class="form-group row" id="forButtons">
+        </div>
+    </form>
+    <!--alers-->
+    <div class="alert alert-success alert-danger" id="pronadjen" style="display: none">
+        <button type="button" class="close" data-dismiss="alert" onclick="javascript:hideAlert()">&times;</button>
+        Kategorija nije pronadjena!
+    </div>
+    <div class="alert alert-success alert-danger" id="potreba" style="display: none">
+        <button type="button" class="close" data-dismiss="alert" onclick="javascript:hideAlert()">&times;</button>
+        Kategorija je u potrebi!
+    </div>
+    <div class="alert alert-success alert-danger" id="jedinstven" style="display: none">
+        <button type="button" class="close" data-dismiss="alert" onclick="javascript:hideAlert()">&times;</button>
+        Ime nije jedinsven!
+    </div>
+    <div class="alert alert-success alert-success" id="uspeh" style="display: none">
+        <button type="button" class="close" data-dismiss="alert" onclick="javascript:hideAlert()">&times;</button>
+        Uspesno ste izmenili Kategoriju.
+    </div>
+    <!--alerts end-->
+    <script>
+        if('ime' in params) {
+            $('#forButtons').append($('<input type="submit" class="btn btn-primary col mx-2" id="change" value="Change">'));
+            $('#forButtons').append($('<input type="submit" class="btn btn-primary col mx-2" id="delete" value="Delete">'))
+        }
+        else {
+            $('#forButtons').append($('<input type="submit" class="btn btn-primary col mx-2" id="add" value="Add">'));
+        }
+
+        //namesti parametre
+        if('ime' in params) {
+            $.ajax({
+                url: "/WebProjekat/rest/kategorije/" + params.ime,
+                type: 'GET',
+                complete: function(data) {
+                    console.log(data);
+                    var kategorija = data.responseJSON;
+                    $('#ime').val(kategorija.ime);
+                    $('#brjezgara').val(kategorija.brJezgara);
+                    $('#ram').val(kategorija.ram);
+                    $('#gpu').val(kategorija.gpu);
+                }
+            })
+        }
+
+        function chekckValues() {
+            var good = true;
+            if($('#ime').val() === "") {
+                good = false;
+                $('#imeErrorPostoji').show();
+            }
+            else {
+                $('#imeErrorPostoji').hide();
+            }
+            if($('#brjezgara').val() === "") {
+                good = false;
+                $('#brojJezgaraPostoji').show();
+            }
+            else {
+                $('#brojJezgaraPostoji').hide();
+            }
+            var brojJezgara = parseInt($('#brjezgara').val());
+            if(Number.isNaN(brojJezgara)) {
+                good = false;
+                $('#brojJezgaraBroj').show();
+            }
+            else {
+                $('#brojJezgaraBroj').hide();
+            }
+            if(brojJezgara <= 0) {
+                good = false;
+                $('#brojJezgaraPositivan').show();
+            }
+            else {
+                $('#brojJezgaraPositivan').hide();
+            }
+            if($('#ram').val() === "") {
+                good = false;
+                $('#ramPostoji').show();
+            }
+            else {
+                $('#ramPostoji').hide();
+            }
+            var ram = parseInt($('#ram').val());
+            if(Number.isNaN(ram)) {
+                good = false;
+                $('#ramBroj').show();
+            }
+            else {
+                $('#ramBroj').hide();
+            }
+            if(ram <= 0) {
+                good = false;
+                $('#ramPositivan').show();
+            }
+            else {
+                $('#ramPositivan').hide();
+            }
+            var gpu = parseInt($('#gpu').val());
+            if(Number.isNaN(gpu) && !($('#gpu').val() === "")) {
+                good = false;
+                $('#gpuBroj').show();
+            }
+            else {
+                $('#gpuBroj').hide();
+            }
+            if(ram <= 0) {
+                good = false;
+                $('#gpuPositivan').show();
+            }
+            else {
+                $('#gpuPositivan').hide();
+            }
+            return good;
+        }
+
+        function deleteElem() {
+            $.ajax({
+                url: "/WebProjekat/rest/kategorije/" + params.ime,
+                type: 'DELETE',
+                complete: function(data) {
+                    console.log(data);
+                    if(data.status === 200) {
+                        window.location.href = "/WebProjekat/liste/Kategorije.html";
+                    }
+                    if(data.status === 400) {
+                        if(data.responseJSON.error === "Kategorija not found!") {
+                            $('#pronadjen').show()
+                        }
+                        if(data.responseJSON.error === "Kategorija is in use!") {
+                            $('#potreba').show()
+                        }
+                    }
+                }
+            })
+        }
+
+        function changeElement() {
+            if(chekckValues()) {
+                var data = {
+                    ime: $('#ime').val(),
+                    brJezgara: $('#brjezgara').val(),
+                    ram: $('#ram').val(),
+                    gpu: $('#gpu').val()
+                }
+                var s = JSON.stringify(data);
+                $.ajax({
+                    url: "/WebProjekat/rest/kategorije/" + params.ime,
+                    type: "PUT",
+                    data: s,
+                    contentType : "application/json",
+                    dataType : "json",
+                    complete: function(data) {
+                        console.log(data);
+                        if(data.status === 200) {
+                            $('#uspeh').show();
+                        }
+                        if(data.status === 400) {
+                            $('#jedinstven').show();
+                        }
+                    }
+                });
+            }
+        }
+
+        function addElement() {
+            if(chekckValues()) {
+                var data = {
+                    ime: $('#ime').val(),
+                    brJezgara: $('#brjezgara').val(),
+                    ram: $('#ram').val(),
+                    gpu: $('#gpu').val()
+                }
+                var s = JSON.stringify(data);
+                $.ajax({
+                    url: "/WebProjekat/rest/kategorije/",
+                    type: "POST",
+                    data: s,
+                    contentType : "application/json",
+                    dataType : "json",
+                    complete: function(data) {
+                        console.log(data);
+                        if(data.status === 200) {
+					        window.location.href = "/WebProjekat/liste/Kategorije.html"
+                        }
+                        if(data.status === 400) {
+                            $('#jedinstven').show();
+                        }
+                    }
+                });
+            }
+        }
+
+        $('form').submit(function(event) {
+            event.preventDefault();
+            var button = event.originalEvent.submitter.id
+            switch(button) {
+                case 'change':
+                    changeElement();
+                    break;
+                case 'delete':
+                    deleteElem();
+                    break;
+                case 'add':
+                    addElement()
+                    break;
+            }
+        });
+    </script>
+
+</body>
+</html>

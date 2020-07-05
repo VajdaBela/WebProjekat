@@ -16,3 +16,17 @@ function checkRedirect(uloge, destination) {
 	}
 	window.location.replace(destination);
 }
+function getAllParams() {
+    var params = {};
+    var splits = window.location.href.split("?")
+    if(splits.length <= 1){
+        return params
+    }
+    var allParams = window.location.href.split("?")[1];
+    var nameValues = allParams.split("&");
+    for(var i = 0; i < nameValues.length; i++) {
+        var splited = nameValues[i].split("=")
+        params[splited[0]] = splited[1];
+    }
+    return params;
+}
