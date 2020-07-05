@@ -1,0 +1,7 @@
+{"email":"korisnik1","lozinka":"korisnik1","ime":"korisnik1","prezime":"korisnik1","organizacija":"org2","uloga":"KORISNIK"}
+{"email":"tyu","lozinka":"tyu","ime":"tyu","prezime":"tyu","organizacija":"org123","uloga":"ADMIN"}
+{"email":"korisnik2","lozinka":"korisnik2","ime":"korisnik2222","prezime":"korisnik2","organizacija":"org123","uloga":"ADMIN"}
+{"email":"korisnik3","lozinka":"korisnik3","ime":"korisnik3","prezime":"korisnik3","organizacija":"org123","uloga":"KORISNIK"}
+{"email":"admin","lozinka":"popo","ime":"admin","prezime":"admin","organizacija":"","uloga":"SUPER_ADMIN"}
+{"email":"poi","lozinka":"poi","ime":"po","prezime":"poi","organizacija":"qqq","uloga":"KORISNIK"}
+{"email":"qwe","lozinka":"qwe","ime":"qwe","prezime":"qwe","organizacija":"org123","uloga":"ADMIN"}

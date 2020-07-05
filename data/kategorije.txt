@@ -1,0 +1,3 @@
+{"ime":"kategorija3","brJezgara":3,"ram":3,"gpu":5}
+{"ime":"kategorija2","brJezgara":2,"ram":2,"gpu":2}
+{"ime":"kategorija1","brJezgara":1,"ram":1,"gpu":1}

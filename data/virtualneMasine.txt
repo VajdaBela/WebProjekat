@@ -1,0 +1,4 @@
+{"ime":"virtualnaMasina1","organizacija":"org123","kategorija":"kategorija1","kategorijaCeo":{"ime":"kategorija1","brJezgara":1,"ram":1,"gpu":1},"aktivan":false,"aktivnosti":[]}
+{"ime":"virtualnaMasina23","organizacija":"org123","kategorija":"kategorija3","kategorijaCeo":{"ime":"kategorija3","brJezgara":3,"ram":3,"gpu":3},"aktivan":true,"aktivnosti":[1593953523839]}
+{"ime":"asdf","organizacija":"org123","kategorija":"kategorija3","kategorijaCeo":{"ime":"kategorija3","brJezgara":3,"ram":3,"gpu":3},"aktivan":false,"aktivnosti":[]}
+{"ime":"virtualnaMasina3","organizacija":"org2","kategorija":"kategorija2","kategorijaCeo":{"ime":"kategorija2","brJezgara":2,"ram":2,"gpu":2},"aktivan":false,"aktivnosti":[]}

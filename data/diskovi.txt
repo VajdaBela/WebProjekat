@@ -1,0 +1,5 @@
+{"ime":"tyu","organizacija":"org123","tip":"SSD","kapacitet":45,"virtualnaMasina":"virtualnaMasina1"}
+{"ime":"disk3","organizacija":"org2","tip":"HDD","kapacitet":3,"virtualnaMasina":"virtualnaMasina3"}
+{"ime":"disk1","organizacija":"org123","tip":"HDD","kapacitet":1,"virtualnaMasina":"virtualnaMasina1"}
+{"ime":"disk2","organizacija":"org123","tip":"HDD","kapacitet":2,"virtualnaMasina":"virtualnaMasina23"}
+{"ime":"ewq","organizacija":"org123","tip":"SSD","kapacitet":3,"virtualnaMasina":"virtualnaMasina1"}

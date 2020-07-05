@@ -1,0 +1,3 @@
+{"ime":"qqq","opis":"qqq","logo":"qqq"}
+{"ime":"org123","opis":"jako dobarr","logo":"defaultLogo.jpg"}
+{"ime":"org2","opis":"vrlo los","logo":"defaultLogo.jpg"}
