@@ -64,7 +64,7 @@ public class DiskList {
 	public Disk find(String ime) {
 		Disk disk = diskovi.get(ime);
 		if (disk == null)
-			problemMsg.setError("Disk ne postolji!");
+			problemMsg.setError("Disk not found!");
 		return disk;
 	}
 
@@ -75,16 +75,6 @@ public class DiskList {
 		}
 		if (find(disk.getIme()) != null) {
 			problemMsg.setError("Ime nije jedinstven!");
-			return false;
-		}
-
-		if (disk.getOrganizacija() == null) {
-			problemMsg.setError("Organizacija mora da postolji!");
-			return false;
-		}
-		Organizacija organizacija = AllLists.organizacije.find(disk.getOrganizacija());
-		if (organizacija == null) {
-			problemMsg.setError("Ne postolji organizacija!");
 			return false;
 		}
 
@@ -121,15 +111,13 @@ public class DiskList {
 		Disk madeDisk = new Disk();
 
 		madeDisk.setIme(disk.getIme());
-		Organizacija organizacija = AllLists.organizacije.find(disk.getOrganizacija());
-		madeDisk.setOrganizacija(organizacija);
-		organizacija.addDisk(madeDisk);
 		madeDisk.setTip(Tip.valueOf(disk.getTip()));
 		madeDisk.setKapacitet(disk.getKapacitet());
 		VirtualnaMasina virtualnaMasina = AllLists.virtualneMasine.find(disk.getVirtualnaMasina());
 		madeDisk.setVirtualanaMasina(virtualnaMasina);
 		virtualnaMasina.addDisk(madeDisk);
-
+		madeDisk.setOrganizacija(madeDisk.getVirtualanaMasina().getOrganizacija());
+		madeDisk.getOrganizacija().addDisk(madeDisk);
 		return madeDisk;
 	}
 	
@@ -137,7 +125,13 @@ public class DiskList {
 		disk.setIme(di.getIme());
 		disk.setTip(Tip.valueOf(di.getTip()));
 		disk.setKapacitet(di.getKapacitet());
-
+		VirtualnaMasina vm = AllLists.virtualneMasine.find(di.getVirtualnaMasina());
+		disk.getVirtualanaMasina().removeDisk(disk);
+		disk.setVirtualanaMasina(vm);
+		disk.getVirtualanaMasina().addDisk(disk);
+		disk.getOrganizacija().removeDisk(disk);
+		disk.setOrganizacija(disk.getVirtualanaMasina().getOrganizacija());
+		disk.getOrganizacija().addDisk(disk);
 	}
 
 	public HashMap<String, Disk> getDiskovi() {

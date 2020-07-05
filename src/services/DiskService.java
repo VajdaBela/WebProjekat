@@ -57,7 +57,14 @@ public class DiskService {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response makeDisk(DiskDTO disk) {
+	public Response makeDisk(@Context HttpServletRequest request, DiskDTO disk) {
+		if(!Proveravator.proveriUlogu(new Uloga[] {Uloga.SUPER_ADMIN, Uloga.ADMIN}, request)) {
+			return Response
+					.status(Status.UNAUTHORIZED)
+					.entity("Not logged in or insufficient privileges!")
+					.type(MediaType.APPLICATION_JSON)
+					.build();
+		}
 		if(!AllLists.diskovi.addDisk(disk)) {
 			return Response
 					.status(Status.BAD_REQUEST)
@@ -73,14 +80,29 @@ public class DiskService {
 	@GET
 	@Path("{ime}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getDisk(@PathParam("ime") String ime) {
+	public Response getDisk(@Context HttpServletRequest request, @PathParam("ime") String ime) {
+		if(!Proveravator.proveriUlogu(new Uloga[] {Uloga.SUPER_ADMIN, Uloga.ADMIN, Uloga.KORISNIK}, request)) {
+			return Response
+					.status(Status.UNAUTHORIZED)
+					.entity("Not logged in or insufficient privileges!")
+					.type(MediaType.APPLICATION_JSON)
+					.build();
+		}
+		Korisnik korisnik = (Korisnik)request.getSession().getAttribute("korisnik");
 		Disk disk = AllLists.diskovi.find(ime);
 		if(disk == null) {
-			Response
+			return Response
 				.status(Status.BAD_REQUEST)
 				.entity(AllLists.diskovi.problemMsg)
 				.type(MediaType.APPLICATION_JSON)
 				.build();
+		}
+		if(korisnik.getUloga() != Uloga.SUPER_ADMIN && !disk.isMyUser(korisnik)) {
+			return Response
+			.status(Status.UNAUTHORIZED)
+			.entity("Not logged in or insufficient privileges!")
+			.type(MediaType.APPLICATION_JSON)
+			.build();
 		}
 		return Response
 				.ok(new DiskDTO(disk))
@@ -106,11 +128,18 @@ public class DiskService {
 	
 	@DELETE
 	@Path("{ime}")
-	public Response deleteDisk(@PathParam("ime") String ime) {
+	public Response deleteDisk(@Context HttpServletRequest request, @PathParam("ime") String ime) {
+		if(!Proveravator.proveriUlogu(new Uloga[] {Uloga.SUPER_ADMIN}, request)) {
+			return Response
+					.status(Status.UNAUTHORIZED)
+					.entity("Not logged in or insufficient privileges!")
+					.type(MediaType.APPLICATION_JSON)
+					.build();
+		}
 		if(!AllLists.diskovi.deleteDisk(ime)) {
 			return Response
 					.status(Status.BAD_REQUEST)
-					.entity(AllLists.kategorije.problemMsg)
+					.entity(AllLists.diskovi.problemMsg)
 					.type(MediaType.APPLICATION_JSON)
 					.build();
 		}

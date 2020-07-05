@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Kompot</title>
+<link rel="stylesheet" href="/WebProjekat/bootstrap.min.css">
+<script src="/WebProjekat/jquery.min.js"></script>
+<script src="/WebProjekat/alertBehaviour.js"></script>
+<style type="text/css">
+	.error {color:red;}
+</style>
+</head>
+<body>
+<!--check and set role-->
+<script src="/WebProjekat/checkRole.js"></script>
+<script type="text/javascript">
+checkRedirect(["SUPER_ADMIN", "ADMIN", "KORISNIK"], "/WebProjekat/login.html")
+params = getAllParams();
+console.log(params)
+</script>
+<!--check and set role end-->
+
+	<!--naviagtion-->
+	<nav class="navbar navbar-expand navbar-light bg-light">
+		<a class="navbar-brand" href="#">Kompot</a>
+		<ul class="navbar-nav mr-auto" id="levo">
+		</ul>
+		<ul class="navbar-nav" id="desno">
+		</ul>
+	</nav>
+	<script src="/WebProjekat/navBar.js"></script>
+    <!--naviagtion end-->
+    
+    <!--forma-->
+    <form class="mx-auto" style="width: 200px;">
+        <div class="form-group">
+            <label for="ime">Ime:</label>
+            <input type="text" class="form-control" id="ime">
+            <div class="error" id="imeErrorPostoji" style="display: none">Ime mora da postoji.</div>
+        </div>
+        <div class="form-group" id="org">
+            <label for="organizacija">Organizacija:</label>
+            <select id="organizacija">
+              </select>
+        </div>
+        <div class="form-group">
+            <label for="tip">Tip:</label>
+            <select id="tip">
+                <option value="SSD">SSD</option>
+                <option value="HDD">HDD</option>
+              </select>
+        </div>
+        <div class="form-group">
+            <label for="VM">Virtualna Masina:</label>
+            <select id="VM">
+              </select>
+        </div>
+        <div class="form-group">
+            <label for="kapacitet">Kapacitet:</label>
+            <input type="text" class="form-control" id="kapacitet">
+            <div class="error" id="kapacitetPostoji" style="display: none">Kapacitet mora da postoji.</div>
+            <div class="error" id="kapacitetPositivan" style="display: none">Kapacitet mora da bude pozitivan.</div>
+            <div class="error" id="kapacitetBroj" style="display: none">Kapacitet mora da bude broj.</div>
+        </div>
+        <div class="form-group row" id="forButtons">
+        </div>
+    </form>
+    <script>
+        if(uloga === "KORISNIK") {
+            $('#ime').attr('disabled', true);
+            $('#organizacija').attr('disabled', true);
+            $('#tip').attr('disabled', true);
+            $('#VM').attr('disabled', true);
+            $('#kapacitet').attr('disabled', true);
+        }
+        else if ('ime' in params) {
+            $('#organizacija').attr('disabled', true);
+        }
+        else {
+            $('#org').hide();
+        }
+    </script>
+    <!--forma end-->
+
+    <!--alers-->
+    <div class="alert alert-success alert-danger" id="pronadjen" style="display: none">
+        <button type="button" class="close" data-dismiss="alert" onclick="javascript:hideAlert()">&times;</button>
+        Disk nije pronadjena!
+    </div>
+    <div class="alert alert-success alert-danger" id="jedinstven" style="display: none">
+        <button type="button" class="close" data-dismiss="alert" onclick="javascript:hideAlert()">&times;</button>
+        Disk nije jedinsven!
+    </div>
+    <div class="alert alert-success alert-success" id="uspeh" style="display: none">
+        <button type="button" class="close" data-dismiss="alert" onclick="javascript:hideAlert()">&times;</button>
+        Uspesno ste izmenili Kategoriju.
+    </div>
+    <!--alerts end-->
+    <script>
+        if('ime' in params) {
+            $('#forButtons').append($('<input type="submit" class="btn btn-primary col mx-2" id="change" value="Change">'));
+            $('#forButtons').append($('<input type="submit" class="btn btn-primary col mx-2" id="delete" value="Delete">'))
+        }
+        else {
+            $('#forButtons').append($('<input type="submit" class="btn btn-primary col mx-2" id="add" value="Add">'));
+        }
+
+        //namesti parametre
+        if('ime' in params) {
+            $.ajax({
+                url: "/WebProjekat/rest/diskovi/" + params.ime,
+                type: 'GET',
+                complete: function(data) {
+                    console.log(data);
+                    var disk = data.responseJSON;
+                    $('#ime').val(disk.ime);
+                    $('#organizacija').append($('<option value="' + disk.organizacija +'">' + disk.organizacija +'</option>'))
+                    $('#organizacija').val(disk.organizacija);
+                    $('#tip').val(disk.tip);
+                    $('#kapacitet').val(disk.kapacitet);
+                    $.ajax({
+                        url: "/WebProjekat/rest/virtualneMasine",
+                        type: 'GET',
+                        complete: function(data) {
+                            var VMs = data.responseJSON;
+                            for(var i = 0; i < VMs.length; ++i) {
+                                $('#VM').append($('<option value="' + VMs[i].ime +'">' + VMs[i].ime +'</option>'))
+                            }
+                            $('#VM').val(disk.virtualnaMasina);
+                        }
+                    });
+                }
+            });
+        }
+        else {
+            $.ajax({
+                url: "/WebProjekat/rest/virtualneMasine",
+                type: 'GET',
+                complete: function(data) {
+                    var VMs = data.responseJSON;
+                    for(var i = 0; i < VMs.length; ++i) {
+                        $('#VM').append($('<option value="' + VMs[i].ime +'">' + VMs[i].ime +'</option>'))
+                    }
+                }
+            });
+        }
+
+        function chekckValues() {
+            var good = true;
+            if($('#ime').val() === "") {
+                good = false;
+                $('#imeErrorPostoji').show();
+            }
+            else {
+                $('#imeErrorPostoji').hide();
+            }
+            if($('#kapacitet').val() === "") {
+                good = false;
+                $('#kapacitetPostoji').show();
+            }
+            else {
+                $('#kapacitetPostoji').hide();
+            }
+            var kapacitet = parseInt($('#kapacitet').val());
+            if(Number.isNaN(kapacitet)) {
+                good = false;
+                $('#kapacitetBroj').show();
+            }
+            else {
+                $('#kapacitetBroj').hide();
+            }
+            if(kapacitet <= 0) {
+                good = false;
+                $('#kapacitetPositivan').show();
+            }
+            else {
+                $('#kapacitetPositivan').hide();
+            }
+            return good;
+        }
+
+        function deleteElem() {
+            $.ajax({
+                url: "/WebProjekat/rest/diskovi/" + params.ime,
+                type: 'DELETE',
+                complete: function(data) {
+                    console.log(data);
+                    if(data.status === 200) {
+                        window.location.href = "/WebProjekat/liste/Diskovi.html";
+                    }
+                    if(data.status === 400) {
+                        if(data.responseJSON.error === "Disk not found!") {
+                            $('#pronadjen').show()
+                        }
+                    }
+                }
+            })
+        }
+
+        function changeElement() {
+            if(chekckValues()) {
+                var data = {
+                    ime: $('#ime').val(),
+                    tip: $('#tip').val(),
+                    kapacitet: $('#kapacitet').val(),
+                    virtualnaMasina: $('#VM').val()
+                }
+                var s = JSON.stringify(data);
+                $.ajax({
+                    url: "/WebProjekat/rest/diskovi/" + params.ime,
+                    type: "PUT",
+                    data: s,
+                    contentType : "application/json",
+                    dataType : "json",
+                    complete: function(data) {
+                        console.log(data);
+                        if(data.status === 200) {
+                            $('#uspeh').show();
+                        }
+                        if(data.status === 400) {
+                            $('#jedinstven').show();
+                        }
+                    }
+                });
+            }
+        }
+
+        function addElement() {
+            if(chekckValues()) {
+                var data = {
+                    ime: $('#ime').val(),
+                    kapacitet: $('#kapacitet').val(),
+                    virtualnaMasina: $('#VM').val(),
+                    tip: $('#tip').val()
+                }
+                var s = JSON.stringify(data);
+                $.ajax({
+                    url: "/WebProjekat/rest/diskovi/",
+                    type: "POST",
+                    data: s,
+                    contentType : "application/json",
+                    dataType : "json",
+                    complete: function(data) {
+                        console.log(data);
+                        if(data.status === 200) {
+					        window.location.href = "/WebProjekat/liste/Diskovi.html"
+                        }
+                        if(data.status === 400) {
+                            $('#jedinstven').show();
+                        }
+                    }
+                });
+            }
+        }
+
+        $('form').submit(function(event) {
+            event.preventDefault();
+            var button = event.originalEvent.submitter.id
+            switch(button) {
+                case 'change':
+                    changeElement();
+                    break;
+                case 'delete':
+                    deleteElem();
+                    break;
+                case 'add':
+                    addElement()
+                    break;
+            }
+        });
+    </script>
+
+</body>
+</html>

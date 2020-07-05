@@ -23,6 +23,15 @@ public class Disk {
 		this.organizacija = organizacija;
 		this.virtualanaMasina = virtualnaMasina;
 	}
+	
+	public boolean isMyUser(Korisnik kor) {
+		for (Korisnik korisnik : organizacija.getKorisnici().values()) {
+			if(kor == korisnik) {
+				return true;
+			}
+		}
+		return false;
+	}
 
 	public String getIme() {
 		return ime;
