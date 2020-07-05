@@ -37,8 +37,10 @@ public class OrganizacijaList {
 			organizacije.put(stari.getIme(), stari);
 			return false;
 		}
-		Organizacija organizacija = makeOrganizacija(org);
-		organizacije.put(organizacija.getIme(), organizacija);
+		stari.setIme(org.getIme());
+		stari.setOpis(org.getOpis());
+		stari.setLogo(org.getLogo());
+		organizacije.put(stari.getIme(), stari);
 		return true;
 	}
 

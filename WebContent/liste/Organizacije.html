@@ -58,13 +58,12 @@
 						var organizacija = organizacije[i];
 						var element = $("<tr></tr>").attr(
 								"onclick",
-								"javascript:redirect('/WebProjekat/pojedinacne/Organizacija.html?ime="
+								"javascript:redirect('/WebProjekat/Pogled/Organizacija.html?ime="
 										+ organizacija.ime + "')");
 						element.append($("<td></td>").text(organizacija.ime));
 						element.append($("<td></td>").text(
                             organizacija.opis))
-						element.append($("<td></td>").text(
-                            organizacija.logo))
+						element.append($('<td><img src="/WebProjekat/rest/images/' + organizacija.logo + '" width="100" height="100"></td>'))
 						$("#content").append(element);
 					}
 				}
@@ -79,7 +78,7 @@
         </div>
         <script>
             if(!(uloga === "KORISNIK")) {
-                $('#forAdd').append($('<a class="btn btn-primary mx-auto"href="/WebProjekat/pojedinacne/Organizacija.html">+ Add</a>'))
+                $('#forAdd').append($('<a class="btn btn-primary mx-auto"href="/WebProjekat/Add/Organizacija.html">+ Add</a>'))
             }
         </script>
 	</div>

@@ -24,7 +24,7 @@ $(document).ready(function () {
 		$("#levo").append(makeNavElem("Korisnici", "/WebProjekat/liste/Korisnici.html"));
 		$("#levo").append(makeNavElem("Virtualne Masine", "/WebProjekat/liste/VirtualneMasine.html"));
 		$("#levo").append(makeNavElem("Diskovi", "/WebProjekat/liste/Diskovi.html"));
-		$("#levo").append(makeNavElem("Organizacija", "#"));
+		$("#levo").append(makeNavElem("Organizacija", "/WebProjekat/Pogled/Organizacija.html?my=true"));
 		$("#levo").append(makeNavElem("Profil", "#"));
 		$("#levo").append(makeNavElem("Mesecna Cena", "#"));
 		$("#desno").append(makeNavElem("Logout", "javascript:logout()"));

@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Kompot</title>
+<link rel="stylesheet" href="/WebProjekat/bootstrap.min.css">
+<script src="/WebProjekat/jquery.min.js"></script>
+<script src="/WebProjekat/alertBehaviour.js"></script>
+<style type="text/css">
+	.error {color:red;}
+</style>
+</head>
+<body>
+<!--check and set role-->
+<script src="/WebProjekat/checkRole.js"></script>
+<script type="text/javascript">
+checkRedirect(["SUPER_ADMIN", "ADMIN"], "/WebProjekat/login.html")
+params = getAllParams();
+console.log(params)
+</script>
+<!--check and set role end-->
+
+	<!--naviagtion-->
+	<nav class="navbar navbar-expand navbar-light bg-light">
+		<a class="navbar-brand" href="#">Kompot</a>
+		<ul class="navbar-nav mr-auto" id="levo">
+		</ul>
+		<ul class="navbar-nav" id="desno">
+		</ul>
+	</nav>
+	<script src="/WebProjekat/navBar.js"></script>
+    <!--naviagtion end-->
+    
+    <form class="mx-auto" style="width: 200px;">
+        <div class="form-group">
+            <label for="ime">Ime:</label>
+            <input type="text" class="form-control" id="ime">
+            <div class="error" id="imeObavezno" style="display: none">Ime je obavezno!</div>
+         </div>
+        <div class="form-group">
+            <label for="opis">Opis</label>
+            <input type="text" class="form-control" id="opis">
+         </div>
+         <div class="form-group">
+            <label for="logo">Logo:</label>
+            <input type="text" class="form-control" id="logo">
+         </div>
+        <div class="form-group row" id="forButtons">
+            <input type="submit" class="btn btn-primary col mx-2" id="change" value="Change">
+        </div>
+    </form>
+    <!--alers-->
+    <div class="alert alert-danger" id="jedinstven" style="display: none">
+        <button type="button" class="close" data-dismiss="alert" onclick="javascript:hideAlert()">&times;</button>
+        Ime nije jedinstvena!
+    </div>
+    <!--alerts end-->
+    <script>
+        $.ajax({
+            url: "/WebProjekat/rest/organizacije/" + params.ime,
+            type: "GET",
+            complete: function(data) {
+                console.log(data);
+                var organizacija = data.responseJSON;
+                $('#ime').val(organizacija.ime),
+                $('#opis').val(organizacija.opis),
+                $('#logo').val(organizacija.logo)
+            }
+        })
+
+        function check() {
+            if($('#ime').val() === "") {
+                $('#imeObavezno').show();
+                return false
+            }
+            else {
+                $('#imeObavezno').hide();
+            }
+            return true;
+        }
+        $('form').submit(function(event) {
+            event.preventDefault();
+            if(!check()){
+                return;
+            }
+            var data = {
+                ime: $('#ime').val(),
+                opis: $('#opis').val(),
+                logo: $('#logo').val()
+            }
+            var s = JSON.stringify(data);
+            $.ajax({
+                    url: "/WebProjekat/rest/organizacije/" + params.ime,
+                    type: "PUT",
+                    data: s,
+                    contentType : "application/json",
+                    dataType : "json",
+                    complete: function(data) {
+                        console.log(data);
+                        if(data.status === 200) {
+					        window.location.href = "/WebProjekat/Pogled/Organizacija.html?ime=" + data.responseJSON.ime; 
+                        }
+                        if(data.status === 400) {
+                            $('#jedinstven').show();
+                        }
+                    }
+                });
+        });
+    </script>
+</body>
+</html>

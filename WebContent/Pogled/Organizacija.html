@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Kompot</title>
+<link rel="stylesheet" href="/WebProjekat/bootstrap.min.css">
+<script src="/WebProjekat/jquery.min.js"></script>
+<script src="/WebProjekat/alertBehaviour.js"></script>
+<style type="text/css">
+	.error {color:red;}
+</style>
+</head>
+<body>
+<!--check and set role-->
+<script src="/WebProjekat/checkRole.js"></script>
+<script type="text/javascript">
+checkRedirect(["SUPER_ADMIN", "ADMIN"], "/WebProjekat/login.html")
+params = getAllParams();
+console.log(params)
+</script>
+<!--check and set role end-->
+
+	<!--naviagtion-->
+	<nav class="navbar navbar-expand navbar-light bg-light">
+		<a class="navbar-brand" href="#">Kompot</a>
+		<ul class="navbar-nav mr-auto" id="levo">
+		</ul>
+		<ul class="navbar-nav" id="desno">
+		</ul>
+	</nav>
+	<script src="/WebProjekat/navBar.js"></script>
+    <!--naviagtion end-->
+    
+    <div calss="container-fluid" id="podaci">
+    </div>
+    <div class="container-fluid row">
+        <a class="btn btn-primary mx-2" id="change">Change</a>
+        
+    </div>
+    
+    <script>
+        var url = ""
+        if('my' in params){
+            url = "/WebProjekat/rest/organizacije/my";
+        }
+        else {
+            url = "/WebProjekat/rest/organizacije/" + params.ime;
+        }
+        $.ajax({
+            url: url,
+            type: "GET",
+            complete: function(data) {
+                console.log(data);
+                var organizacija = data.responseJSON;
+                var element = 
+                $('#podaci').append($("<h1></h1>").text(organizacija.ime));
+                $('#podaci').append($("<p></p>").text(organizacija.opis));
+                $('#podaci').append($("<img>").attr("src", "/WebProjekat/rest/images/" + organizacija.logo).width("300").height("300"));
+                $('#change').attr('href', '/WebProjekat/Izmena/Organizacija.html?ime=' + organizacija.ime)
+            }
+        });
+    </script>
+</body>
+</html>

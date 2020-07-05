@@ -18,8 +18,9 @@ import javax.ws.rs.core.Response.Status;
 
 import app.AllLists;
 import app.Proveravator;
-import data.Organizacija;
+import data.Korisnik;
 import data.Korisnik.Uloga;
+import data.Organizacija;
 import dto.OrganizacijaDTO;
 
 @Path("/organizacije")
@@ -47,7 +48,14 @@ public class OrganizacijeService {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response makeOrganizacija(OrganizacijaDTO org) {
+	public Response makeOrganizacija(@Context HttpServletRequest request, OrganizacijaDTO org) {
+		if(!Proveravator.proveriUlogu(new Uloga[] {Uloga.SUPER_ADMIN}, request)) {
+			return Response
+					.status(Status.UNAUTHORIZED)
+					.entity("Not logged in or insufficient privileges!")
+					.type(MediaType.APPLICATION_JSON)
+					.build();
+		}
 		if(!AllLists.organizacije.addOrganizacija(org)) {
 			return Response
 					.status(Response.Status.BAD_REQUEST)
@@ -63,7 +71,22 @@ public class OrganizacijeService {
 	@GET
 	@Path("{ime}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getOrganizacija(@PathParam("ime") String ime) {
+	public Response getOrganizacija(@Context HttpServletRequest request, @PathParam("ime") String ime) {
+		if(!Proveravator.proveriUlogu(new Uloga[] {Uloga.SUPER_ADMIN, Uloga.ADMIN}, request)) {
+			return Response
+					.status(Status.UNAUTHORIZED)
+					.entity("Not logged in or insufficient privileges!")
+					.type(MediaType.APPLICATION_JSON)
+					.build();
+		}
+		Korisnik korisnik = (Korisnik)request.getSession().getAttribute(LoginService.korisnikAttr);
+		if(korisnik.getUloga() == Uloga.ADMIN && !korisnik.getOrganizacija().getIme().equals(ime)) {
+			return Response
+					.status(Status.UNAUTHORIZED)
+					.entity("Not logged in or insufficient privileges!")
+					.type(MediaType.APPLICATION_JSON)
+					.build();
+		}
 		Organizacija org = AllLists.organizacije.find(ime);
 		if(org == null) {
 			return Response
@@ -81,7 +104,22 @@ public class OrganizacijeService {
 	@Path("{ime}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response changeOrganization(@PathParam("ime") String ime, OrganizacijaDTO org) {
+	public Response changeOrganization(@Context HttpServletRequest request, @PathParam("ime") String ime, OrganizacijaDTO org) {
+		if(!Proveravator.proveriUlogu(new Uloga[] {Uloga.SUPER_ADMIN, Uloga.ADMIN}, request)) {
+			return Response
+					.status(Status.UNAUTHORIZED)
+					.entity("Not logged in or insufficient privileges!")
+					.type(MediaType.APPLICATION_JSON)
+					.build();
+		}
+		Korisnik korisnik = (Korisnik)request.getSession().getAttribute(LoginService.korisnikAttr);
+		if(korisnik.getUloga() == Uloga.ADMIN && !korisnik.getOrganizacija().getIme().equals(ime)) {
+			return Response
+					.status(Status.UNAUTHORIZED)
+					.entity("Not logged in or insufficient privileges!")
+					.type(MediaType.APPLICATION_JSON)
+					.build();
+		}
 		if(!AllLists.organizacije.changeOrganizacija(org, ime)) {
 			return Response
 					.status(Response.Status.BAD_REQUEST)
@@ -91,6 +129,23 @@ public class OrganizacijeService {
 		}
 		return Response
 				.ok(org)
+				.build();
+	}
+	
+	@GET
+	@Path("my")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getMyOrganizacija(@Context HttpServletRequest request) {
+		if(!Proveravator.proveriUlogu(new Uloga[] {Uloga.ADMIN}, request)) {
+			return Response
+					.status(Status.UNAUTHORIZED)
+					.entity("Not logged in or insufficient privileges!")
+					.type(MediaType.APPLICATION_JSON)
+					.build();
+		}
+		Korisnik korisnik = (Korisnik)request.getSession().getAttribute(LoginService.korisnikAttr);
+		return Response
+				.ok(new OrganizacijaDTO(korisnik.getOrganizacija()))
 				.build();
 	}
 }

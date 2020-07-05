@@ -13,7 +13,7 @@ public class Organizacija {
 	public Organizacija() {
 		this.ime = "";
 		this.opis = "";
-		this.logo = "defaultLogo.img";
+		this.logo = "defaultLogo.jpg";
 		this.korisnici = new HashMap<>();
 		this.masine = new HashMap<>();
 		this.diskovi = new HashMap<>();

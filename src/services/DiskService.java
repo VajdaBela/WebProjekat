@@ -31,7 +31,7 @@ public class DiskService {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getDiskove(@Context HttpServletRequest request) {
-		Korisnik korisnik = (Korisnik)request.getSession().getAttribute("korisnik");
+		Korisnik korisnik = (Korisnik)request.getSession().getAttribute(LoginService.korisnikAttr);
 		if(!Proveravator.proveriUlogu(new Uloga[] {Uloga.SUPER_ADMIN, Uloga.ADMIN, Uloga.KORISNIK}, request)) {
 			return Response
 					.status(Status.UNAUTHORIZED)
