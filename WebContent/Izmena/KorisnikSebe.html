@@ -34,7 +34,7 @@ console.log(params)
     <form class="mx-auto" style="width: 200px;" id="form">
         <div class="form-group">
             <label for="email">Email:</label>
-            <input type="password" class="form-control" id="email">
+            <input type="text" class="form-control" id="email">
             <div class="error" id="emailObavezno" style="display: none">Email je obavezno!</div>
 
         </div>
@@ -43,8 +43,8 @@ console.log(params)
             <input type="password" class="form-control" id="lozinka">
         </div>
         <div class="form-group">
-            <label for="lozinka2">Lozinka:</label>
-            <input type="text" class="form-control" id="lozinka2">
+            <label for="lozinka2">Lozinka ponovo:</label>
+            <input type="password" class="form-control" id="lozinka2">
             <div class="error" id="lozRaz" style="display: none">Lozinke se ne poklpaju!</div>
         </div>
         <div class="form-group">
@@ -58,7 +58,7 @@ console.log(params)
             <div class="error" id="prezimeObavezno" style="display: none">Prezime je obavezno!</div>
         </div>
         <div class="form-group row" id="forButtons">
-            <input type="submit" class="btn btn-primary col mx-2" id="change" value="Change">
+            <input type="submit" class="btn btn-primary col mx-2" id="change" value="Izmeni">
         </div>
     </form>
     <script>
@@ -127,7 +127,7 @@ console.log(params)
                     complete: function(data) {
                         console.log(data);
                         if(data.status == 200) {
-                            //window.location.href = "/WebProjekat/liste/Korisnici.html";
+                            window.location.href = "/WebProjekat/liste/Korisnici.html";
                         }
                     }
                 });

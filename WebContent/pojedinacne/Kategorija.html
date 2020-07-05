@@ -72,18 +72,14 @@ console.log(params)
         <button type="button" class="close" data-dismiss="alert" onclick="javascript:hideAlert()">&times;</button>
         Ime nije jedinsven!
     </div>
-    <div class="alert alert-success alert-success" id="uspeh" style="display: none">
-        <button type="button" class="close" data-dismiss="alert" onclick="javascript:hideAlert()">&times;</button>
-        Uspesno ste izmenili Kategoriju.
-    </div>
     <!--alerts end-->
     <script>
         if('ime' in params) {
-            $('#forButtons').append($('<input type="submit" class="btn btn-primary col mx-2" id="change" value="Change">'));
-            $('#forButtons').append($('<input type="submit" class="btn btn-primary col mx-2" id="delete" value="Delete">'))
+            $('#forButtons').append($('<input type="submit" class="btn btn-primary col mx-2" id="change" value="Izmeni">'));
+            $('#forButtons').append($('<input type="submit" class="btn btn-primary col mx-2" id="delete" value="Izbrisi">'))
         }
         else {
-            $('#forButtons').append($('<input type="submit" class="btn btn-primary col mx-2" id="add" value="Add">'));
+            $('#forButtons').append($('<input type="submit" class="btn btn-primary col mx-2" id="add" value="Dodaj">'));
         }
 
         //namesti parametre
@@ -212,7 +208,7 @@ console.log(params)
                     complete: function(data) {
                         console.log(data);
                         if(data.status === 200) {
-                            $('#uspeh').show();
+                            window.location.href = "/WebProjekat/liste/Kategorije.html";
                         }
                         if(data.status === 400) {
                             $('#jedinstven').show();

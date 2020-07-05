@@ -2,6 +2,7 @@ package lists;
 
 import java.util.HashMap;
 
+import app.AllLists;
 import app.JsonError;
 import data.Organizacija;
 import dto.OrganizacijaDTO;
@@ -16,6 +17,7 @@ public class OrganizacijaList {
 		}
 		Organizacija organizacija = makeOrganizacija(org);
 		organizacije.put(organizacija.getIme(), organizacija);
+		AllLists.saveOrganizacija();
 		return true;
 	}
 
@@ -27,7 +29,6 @@ public class OrganizacijaList {
 	}
 
 	public boolean changeOrganizacija(OrganizacijaDTO org, String original) {
-		// TODO edit instead of make
 		Organizacija stari = find(original);
 		if (stari == null) {
 			return false;
@@ -41,6 +42,7 @@ public class OrganizacijaList {
 		stari.setOpis(org.getOpis());
 		stari.setLogo(org.getLogo());
 		organizacije.put(stari.getIme(), stari);
+		AllLists.saveOrganizacija();
 		return true;
 	}
 

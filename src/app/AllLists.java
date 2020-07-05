@@ -61,8 +61,6 @@ public class AllLists {
 			String fulfileName = dataFolder + File.separator + fileName;
 			PrintWriter out  = new PrintWriter(new FileWriter(fulfileName));
 			for (Korisnik korisnik : korisnici.getKorisnici().values()) {
-				if(korisnik.getUloga() ==  Uloga.SUPER_ADMIN)
-					continue;
 				KorisnikDTO korisnikDTO = new KorisnikDTO(korisnik, true);
 				out.println(obj.writeValueAsString(korisnikDTO));
 			}
@@ -172,8 +170,10 @@ public class AllLists {
 				korisnik.setLozinka(korisnikDTO.getLozinka());
 				korisnik.setIme(korisnikDTO.getIme());
 				korisnik.setPrezime(korisnikDTO.getPrezime());
-				korisnik.setOrganizacija(organizacije.getOrganizacije().get(korisnikDTO.getOrganizacija()));
-				korisnik.getOrganizacija().addKorisnik(korisnik);
+				if(!korisnikDTO.getOrganizacija().equals("")) {
+					korisnik.setOrganizacija(organizacije.getOrganizacije().get(korisnikDTO.getOrganizacija()));
+					korisnik.getOrganizacija().addKorisnik(korisnik);
+				}
 				korisnik.setUloga(Uloga.valueOf(korisnikDTO.getUloga()));
 				korisnici.getKorisnici().put(korisnik.getEmail(), korisnik);
 				line = in.readLine();
@@ -218,9 +218,16 @@ public class AllLists {
 			}
 			in.close();
 			
-			//TODO proveriti dali vec ima SUPER_ADMIN i save-ovati ga
-			Korisnik superAdmin = new Korisnik("admin", "admin", "admin", "admin", null, Uloga.SUPER_ADMIN);
-			AllLists.korisnici.getKorisnici().put(superAdmin.getEmail(), superAdmin);
+			boolean foundSAdmin = false;
+			for(Korisnik korisnik : korisnici.getKorisnici().values()) {
+				if(korisnik.getUloga() == Uloga.SUPER_ADMIN) {
+					foundSAdmin = true;
+				}
+			}
+			if(!foundSAdmin) {
+				Korisnik superAdmin = new Korisnik("admin", "admin", "admin", "admin", null, Uloga.SUPER_ADMIN);
+				AllLists.korisnici.getKorisnici().put(superAdmin.getEmail(), superAdmin);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("_________________WARNING_________________");

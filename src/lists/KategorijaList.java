@@ -16,6 +16,7 @@ public class KategorijaList {
 			return false;
 		}
 		kategorije.put(kat.getIme(), kat);
+		AllLists.saveKategorija();
 		return true;
 	}
 
@@ -42,6 +43,7 @@ public class KategorijaList {
 		stari.setGpu(kat.getGpu());
 		stari.setBrJezgara(kat.getBrJezgara());
 		kategorije.put(stari.getIme(), stari);
+		AllLists.saveKategorija();
 		return true;
 	}
 
@@ -57,6 +59,7 @@ public class KategorijaList {
 			}
 		}
 		kategorije.remove(kategorija);
+		AllLists.saveKategorija();
 		return true;
 	}
 

@@ -34,11 +34,15 @@ console.log(params)
     <div calss="container-fluid" id="podaci">
     </div>
     <div class="container-fluid row" id="dugmici">
-        <a class="btn btn-primary mx-2 text-light" id="change">Change</a>
-        <button class="btn btn-primary mx-2" onclick="deleteElement()">Delete</button>
+        
+        
     </div>
     
     <script>
+        if(uloga != "KORISNIK") {
+            $('#dugmici').append($('<a class="btn btn-primary mx-2 text-light" id="change">Izmeni</a>'))
+            $('#dugmici').append($('<button class="btn btn-primary mx-2" onclick="deleteElement()">Izbrisi</button>'))
+        }
         $('#change').attr('href', '/WebProjekat/Izmena/VirtualnaMasina.html?ime=' + params.ime);
         $.ajax({
             url: "/WebProjekat/rest/virtualneMasine/" + params.ime,

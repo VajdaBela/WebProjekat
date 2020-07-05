@@ -11,7 +11,6 @@ import data.Organizacija;
 import data.Korisnik.Uloga;
 import dto.KorisnikDTO;
 
-//TODO ne menjati organizaciju
 public class KorisnikList {
 	private HashMap<String , Korisnik> korisnici = new HashMap<>();
 	public JsonError problemMsg = new JsonError();
@@ -32,6 +31,7 @@ public class KorisnikList {
 		
 		Korisnik korisnik = makeKorisnik(kor);
 		korisnici.put(korisnik.getEmail(), korisnik);
+		AllLists.saveKorisnik();
 		return true;
 	}
 	
@@ -51,12 +51,14 @@ public class KorisnikList {
 		stari.setPrezime(kor.getPrezime());
 		stari.setUloga(Uloga.valueOf(kor.getUloga()));
 		korisnici.put(stari.getEmail(), stari);
+		AllLists.saveKorisnik();
 		return true;
 	}
 	
 	public boolean changeSelf(KorisnikDTO kor, Korisnik stari) {
 		korisnici.remove(stari.getEmail());
-		kor.setOrganizacija(stari.getOrganizacija().getIme());
+		if(stari.getUloga() != Uloga.SUPER_ADMIN)
+			kor.setOrganizacija(stari.getOrganizacija().getIme());
 		kor.setUloga(stari.getUloga().toString());
 		if(!checkVAlid(kor, true)) {
 			korisnici.put(stari.getEmail(), stari);
@@ -69,6 +71,7 @@ public class KorisnikList {
 		stari.setPrezime(kor.getPrezime());
 		stari.setEmail(kor.getEmail());
 		korisnici.put(stari.getEmail(), stari);
+		AllLists.saveKorisnik();
 		return true;
 	}
 	
@@ -79,6 +82,7 @@ public class KorisnikList {
 		}
 		korisnici.remove(kor);
 		korisnik.getOrganizacija().removeKorisnik(korisnik);
+		AllLists.saveKorisnik();
 		return true;
 	}
 	
@@ -125,12 +129,12 @@ public class KorisnikList {
 			return false;
 		}
 		
-		if(novi && kor.getOrganizacija() == null) {
+		if( novi && kor.getOrganizacija() == null && Uloga.valueOf(kor.getUloga()) != Uloga.SUPER_ADMIN) {
 			problemMsg.setError("Organizacija mora da postolji!");
 			return false;
 		}
 		Organizacija organizacija = AllLists.organizacije.find(kor.getOrganizacija());
-		if( novi && organizacija == null)
+		if( novi && organizacija == null && Uloga.valueOf(kor.getUloga()) != Uloga.SUPER_ADMIN)
 		{
 			problemMsg.setError("Ne postolji organizacija!");
 			return false;

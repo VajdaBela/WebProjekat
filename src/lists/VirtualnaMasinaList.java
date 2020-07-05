@@ -29,6 +29,7 @@ public class VirtualnaMasinaList {
 		}
 		VirtualnaMasina masina = makeVirtualnaMasina(virm);
 		virtualneMasine.put(masina.getIme(), masina);
+		AllLists.saveVirtualnaMasina();
 		return true;
 	}
 
@@ -45,6 +46,7 @@ public class VirtualnaMasinaList {
 		stari.setKategorija(AllLists.kategorije.getKategorije().get(virm.getKategorija()));
 		stari.setIme(virm.getIme());
 		virtualneMasine.put(stari.getIme(), stari);
+		AllLists.saveVirtualnaMasina();
 		return true;
 	}
 
@@ -55,6 +57,7 @@ public class VirtualnaMasinaList {
 		}
 		virtualneMasine.remove(ime);
 		virtualnaMasina.getOrganizacija().removeMasina(virtualnaMasina);
+		AllLists.saveVirtualnaMasina();
 		return true;
 	}
 

@@ -31,6 +31,7 @@ public class DiskList {
 
 		Disk newDisk = makeDisk(disk);
 		diskovi.put(newDisk.getIme(), newDisk);
+		AllLists.saveDisk();
 		return true;
 	}
 
@@ -47,6 +48,7 @@ public class DiskList {
 
 		edit(stari, di);
 		diskovi.put(stari.getIme(), stari);
+		AllLists.saveDisk();
 		return true;
 	}
 
@@ -58,6 +60,7 @@ public class DiskList {
 		diskovi.remove(disk.getIme());
 		disk.getOrganizacija().removeDisk(disk);
 		disk.getVirtualanaMasina().removeDisk(disk);
+		AllLists.saveDisk();
 		return true;
 	}
 

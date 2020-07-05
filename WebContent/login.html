@@ -54,6 +54,7 @@ checkRedirect(["NEULOGOVAN"], "/WebProjekat/liste/VirtualneMasine.html")
 
 <script type="text/javascript">
 	$('form').submit(function(event) {
+        event.preventDefault();
 		var invalid = false;
 		if($("#email").val() === "") {
 			invalid = true;
@@ -68,7 +69,9 @@ checkRedirect(["NEULOGOVAN"], "/WebProjekat/liste/VirtualneMasine.html")
 		}
 		else {
 			$("#passwordError").hide();
-		}
+        }
+        if(invalid)
+            return;
 		var data = {
 				name: $('#email').val(),
 				password: $('#password').val(),
@@ -90,7 +93,7 @@ checkRedirect(["NEULOGOVAN"], "/WebProjekat/liste/VirtualneMasine.html")
                 }
 			}
 		});
-		event.preventDefault();
+		
 	});
 </script>
 </body>
