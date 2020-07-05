@@ -236,7 +236,7 @@
 						var masina = masine[i];
 						var element = $("<tr></tr>").attr(
 								"onclick",
-								"javascript:redirect('/WebProjekat/pojedinacne/VirtualnaMasina.html?ime="
+								"javascript:redirect('/WebProjekat/Pogled/VirtualnaMasina.html?ime="
 										+ masina.ime + "')");
 						element.append($("<td></td>").text(masina.ime));
 						element.append($("<td></td>").text(
@@ -263,7 +263,7 @@
         </div>
         <script>
             if(!(uloga === "KORISNIK")) {
-                $('#forAdd').append($('<a class="btn btn-primary mx-auto"href="/WebProjekat/pojedinacne/VirtualnaMasina.html">+ Add</a>'))
+                $('#forAdd').append($('<a class="btn btn-primary mx-auto"href="/WebProjekat/Add/VirtualnaMasina.html">+ Add</a>'))
             }
         </script>
 	</div>

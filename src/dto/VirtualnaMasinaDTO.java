@@ -12,6 +12,7 @@ public class VirtualnaMasinaDTO {
 	private String organizacija;
 	private String kategorija;
 	private Kategorija kategorijaCeo;
+	private boolean aktivan;
 	private List<Date> aktivnosti;
 
 	public VirtualnaMasinaDTO() {
@@ -25,6 +26,7 @@ public class VirtualnaMasinaDTO {
 		this.kategorija = virtualnaMasina.getKategorija().getIme();
 		this.kategorijaCeo = virtualnaMasina.getKategorija();
 		this.aktivnosti = virtualnaMasina.getAktivnosti();
+		this.aktivan = virtualnaMasina.isAktivan();
 	}
 	
 	public String getIme() {
@@ -66,5 +68,14 @@ public class VirtualnaMasinaDTO {
 	public void setKategorijaCeo(Kategorija kategorijaCeo) {
 		this.kategorijaCeo = kategorijaCeo;
 	}
+
+	public boolean isAktivan() {
+		return aktivan;
+	}
+
+	public void setAktivan(boolean aktivan) {
+		this.aktivan = aktivan;
+	}
+	
 
 }

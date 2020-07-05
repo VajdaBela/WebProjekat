@@ -25,7 +25,7 @@ public class KategorijaService {
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getKategorije(@Context HttpServletRequest request) {
-		if(!Proveravator.proveriUlogu(new Uloga[] {Uloga.SUPER_ADMIN}, request)) {
+		if(!Proveravator.proveriUlogu(new Uloga[] {Uloga.SUPER_ADMIN, Uloga.ADMIN}, request)) {
 			return Response
 					.status(Status.UNAUTHORIZED)
 					.entity("Not logged in or insufficient privileges!")

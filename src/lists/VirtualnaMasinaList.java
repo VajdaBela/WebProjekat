@@ -24,7 +24,7 @@ public class VirtualnaMasinaList {
 	}
 
 	public boolean addVirtualnaMasina(VirtualnaMasinaDTO virm) {
-		if (!checkValid(virm)) {
+		if (!checkValid(virm, true)) {
 			return false;
 		}
 		VirtualnaMasina masina = makeVirtualnaMasina(virm);
@@ -38,12 +38,13 @@ public class VirtualnaMasinaList {
 			return false;
 		}
 		virtualneMasine.remove(original);
-		if (!checkValid(virm)) {
+		if (!checkValid(virm, false)) {
 			virtualneMasine.put(stari.getIme(), stari);
 			return false;
 		}
-		VirtualnaMasina masina = makeVirtualnaMasina(virm);
-		virtualneMasine.put(masina.getIme(), masina);
+		stari.setKategorija(AllLists.kategorije.getKategorije().get(virm.getKategorija()));
+		stari.setIme(virm.getIme());
+		virtualneMasine.put(stari.getIme(), stari);
 		return true;
 	}
 
@@ -71,7 +72,7 @@ public class VirtualnaMasinaList {
 		return virtualnaMasina;
 	}
 
-	public boolean checkValid(VirtualnaMasinaDTO virm) {
+	public boolean checkValid(VirtualnaMasinaDTO virm, boolean novi) {
 		if (virm.getIme() == null || virm.getIme().equals("")) {
 			problemMsg.setError("Ime mora da postolji!");
 			return false;
@@ -81,12 +82,12 @@ public class VirtualnaMasinaList {
 			return false;
 		}
 
-		if (virm.getOrganizacija() == null) {
+		if (novi && virm.getOrganizacija() == null) {
 			problemMsg.setError("Organizacija mora da postolji!");
 			return false;
 		}
 		Organizacija organizacija = AllLists.organizacije.find(virm.getOrganizacija());
-		if (organizacija == null) {
+		if (novi && organizacija == null) {
 			problemMsg.setError("Ne postolji organizacija!");
 			return false;
 		}

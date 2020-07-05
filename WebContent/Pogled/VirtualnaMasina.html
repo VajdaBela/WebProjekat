@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Kompot</title>
+<link rel="stylesheet" href="/WebProjekat/bootstrap.min.css">
+<script src="/WebProjekat/jquery.min.js"></script>
+<script src="/WebProjekat/alertBehaviour.js"></script>
+<style type="text/css">
+	.error {color:red;}
+</style>
+</head>
+<body>
+<!--check and set role-->
+<script src="/WebProjekat/checkRole.js"></script>
+<script type="text/javascript">
+checkRedirect(["SUPER_ADMIN", "ADMIN", 'KORISNIK'], "/WebProjekat/login.html")
+params = getAllParams();
+console.log(params)
+</script>
+<!--check and set role end-->
+
+	<!--naviagtion-->
+	<nav class="navbar navbar-expand navbar-light bg-light">
+		<a class="navbar-brand" href="#">Kompot</a>
+		<ul class="navbar-nav mr-auto" id="levo">
+		</ul>
+		<ul class="navbar-nav" id="desno">
+		</ul>
+	</nav>
+	<script src="/WebProjekat/navBar.js"></script>
+    <!--naviagtion end-->
+    
+    <div calss="container-fluid" id="podaci">
+    </div>
+    <div class="container-fluid row" id="dugmici">
+        <a class="btn btn-primary mx-2 text-light" id="change">Change</a>
+        <button class="btn btn-primary mx-2" onclick="deleteElement()">Delete</button>
+    </div>
+    
+    <script>
+        $('#change').attr('href', '/WebProjekat/Izmena/VirtualnaMasina.html?ime=' + params.ime);
+        $.ajax({
+            url: "/WebProjekat/rest/virtualneMasine/" + params.ime,
+            type: "GET",
+            complete: function(data) {
+                console.log(data);
+                var VirutalnaMasina = data.responseJSON;
+                $('#podaci').append($('<h1></h1>').text(VirutalnaMasina.ime));
+                $('#podaci').append($('<p></p>').text('Broj jezgara: ' + VirutalnaMasina.kategorijaCeo.brJezgara));
+                $('#podaci').append($('<p></p>').text('Kolicina RAM-a: ' + VirutalnaMasina.kategorijaCeo.ram + 'GB'));
+                $('#podaci').append($('<p></p>').text('Broj GPU jezgara: ' + VirutalnaMasina.kategorijaCeo.gpu));
+                if(uloga != "KORISNIK") {
+                    if(VirutalnaMasina.aktivan) {
+                        $('#podaci').append($('<p></p>').text('Trenutno aktivan'));
+                        $('#dugmici').append($('<button class="btn btn-primary mx-2" onclick="promeniAktivnost()">Deaktiviraj</button>'));
+                    }
+                    else {
+                        $('#podaci').append($('<p></p>').text('Trenutno neaktivan'));
+                        $('#dugmici').append($('<button class="btn btn-primary mx-2" onclick="promeniAktivnost()">Aktiviraj</button>'))
+                    }
+                }
+                for(var i = 0; i < VirutalnaMasina.aktivnosti.length; ++i) {
+                    if(i%2 === 0)
+                        $('#podaci').append($('<p></p>').text('Aktiviran: ' + VirutalnaMasina.aktivnosti[i]));
+                    else
+                        $('#podaci').append($('<p></p>').text('Deaktiviran: ' + VirutalnaMasina.aktivnosti[i]));
+                }
+            }
+        });
+
+        function deleteElement() {
+            $.ajax({
+                url: "/WebProjekat/rest/virtualneMasine/" + params.ime,
+                type: "DELETE",
+                complete: function(data) {
+                    console.log(data);
+                    if(data.status == 200) {
+                        window.location.href = "/WebProjekat/liste/VirtualneMasine.html";
+                    }
+                }
+            })
+        }
+
+        function promeniAktivnost() {
+            $.ajax({
+                url: "/WebProjekat/rest/virtualneMasine/promeni/" + params.ime,
+                type: 'POST',
+                complete: function(data) {
+                    console.log(data);
+                    location.reload(); 
+                }
+            })
+        }
+    </script>
+</body>
+</html>

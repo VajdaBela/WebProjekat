@@ -1,6 +1,7 @@
 package services;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -57,7 +58,18 @@ public class VirtualnaMasinaService {
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response makeVirtualnaMasina(VirtualnaMasinaDTO virm) {
+	public Response makeVirtualnaMasina(@Context HttpServletRequest request, VirtualnaMasinaDTO virm) {
+		Korisnik korisnik = (Korisnik)request.getSession().getAttribute("korisnik");
+		if(!Proveravator.proveriUlogu(new Uloga[] {Uloga.SUPER_ADMIN, Uloga.ADMIN, Uloga.KORISNIK}, request)) {
+			return Response
+					.status(Status.UNAUTHORIZED)
+					.entity("Not logged in or insufficient privileges!")
+					.type(MediaType.APPLICATION_JSON)
+					.build();
+		}
+		if(korisnik.getUloga() == Uloga.ADMIN) {
+			virm.setOrganizacija(korisnik.getOrganizacija().getIme());
+		}
 		if (!AllLists.virtualneMasine.addVirtualnaMasina(virm)) {
 			return Response.status(Status.BAD_REQUEST).entity(AllLists.virtualneMasine.problemMsg)
 					.type(MediaType.APPLICATION_JSON).build();
@@ -81,7 +93,14 @@ public class VirtualnaMasinaService {
 	@Path("{ime}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response changeVirtualnaMasina(@PathParam("ime") String ime, VirtualnaMasinaDTO virm) {
+	public Response changeVirtualnaMasina(@Context HttpServletRequest request, @PathParam("ime") String ime, VirtualnaMasinaDTO virm) {
+		if(!Proveravator.proveriUlogu(new Uloga[] {Uloga.SUPER_ADMIN, Uloga.ADMIN, Uloga.KORISNIK}, request)) {
+			return Response
+					.status(Status.UNAUTHORIZED)
+					.entity("Not logged in or insufficient privileges!")
+					.type(MediaType.APPLICATION_JSON)
+					.build();
+		}
 		if (!AllLists.virtualneMasine.changeVirtualnaMasina(virm, ime)) {
 			return Response.status(Status.BAD_REQUEST).entity(AllLists.virtualneMasine.problemMsg)
 					.type(MediaType.APPLICATION_JSON).build();
@@ -96,6 +115,37 @@ public class VirtualnaMasinaService {
 			return Response.status(Status.BAD_REQUEST).entity(AllLists.virtualneMasine.problemMsg)
 					.type(MediaType.APPLICATION_JSON).build();
 		}
+		return Response.ok().build();
+	}
+	
+	@POST
+	@Path("/promeni/{ime}")
+	public Response promeniAktivnost(@Context HttpServletRequest request, @PathParam("ime") String ime) {
+		Korisnik korisnik = (Korisnik)request.getSession().getAttribute("korisnik");
+		if(!Proveravator.proveriUlogu(new Uloga[] {Uloga.SUPER_ADMIN, Uloga.ADMIN, Uloga.KORISNIK}, request)) {
+			return Response
+					.status(Status.UNAUTHORIZED)
+					.entity("Not logged in or insufficient privileges!")
+					.type(MediaType.APPLICATION_JSON)
+					.build();
+		}
+		VirtualnaMasina virtualnaMasina = AllLists.virtualneMasine.getVirtualneMasine().get(ime);
+		if(virtualnaMasina == null) {
+			return Response
+					.status(Status.UNAUTHORIZED)
+					.entity("Not logged in or insufficient privileges!")
+					.type(MediaType.APPLICATION_JSON)
+					.build();
+		}
+		if(korisnik.getUloga() == Uloga.ADMIN && korisnik.getOrganizacija() != virtualnaMasina.getOrganizacija()) {
+			return Response
+					.status(Status.UNAUTHORIZED)
+					.entity("Not logged in or insufficient privileges!")
+					.type(MediaType.APPLICATION_JSON)
+					.build();
+		}
+		virtualnaMasina.setAktivan(!virtualnaMasina.isAktivan());
+		virtualnaMasina.getAktivnosti().add(new Date());
 		return Response.ok().build();
 	}
 }

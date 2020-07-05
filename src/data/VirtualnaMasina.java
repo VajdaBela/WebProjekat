@@ -9,6 +9,7 @@ public class VirtualnaMasina {
 	private String ime;
 	private Organizacija organizacija;
 	private Kategorija kategorija;
+	private boolean aktivan;
 	private HashMap<String, Disk> diskovi;
 	private List<Date> aktivnosti;
 
@@ -73,6 +74,14 @@ public class VirtualnaMasina {
 	
 	public void removeDisk(Disk disk) {
 		this.diskovi.remove(disk.getIme());
+	}
+
+	public boolean isAktivan() {
+		return aktivan;
+	}
+
+	public void setAktivan(boolean aktivan) {
+		this.aktivan = aktivan;
 	}
 
 }
